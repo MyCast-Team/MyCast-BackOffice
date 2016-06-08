@@ -7,6 +7,7 @@ var musique=require("./musique");
 var admin=require("./admin");
 var plugin=require("./plugin");
 var userplugin=require("./userplugin");
+var token=require("./token")
 sequelize.sync();
 
 module.exports={
@@ -19,4 +20,5 @@ module.exports={
         "admin":admin,
         "plugin":plugin,
         "userplugin":userplugin,
+		"token":token,
 };

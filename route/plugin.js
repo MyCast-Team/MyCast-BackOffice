@@ -3,7 +3,7 @@ var utils = require("../Utils");
 var multer = require("multer");
 var storage = multer.diskStorage({
     destination: function (req, file, callback) {
-        callback(null, './uploads/');
+        callback(null, '/uploads/');
     },
     filename: function (req, file, callback) {
         callback(null, file.fieldname + '-' + file.originalname);
@@ -36,26 +36,10 @@ module.exports = function (app) {
     });
 
     app.get("/Listeplugin", function (req, res, next) {
-        if (req.session.admin) {
+        
             var plugin = models.plugin;
 
-            /*var request={};
-             if(req.query.limit){
-             request.limit=parseInt(req.query.limit);
-             
-             
-             }
-             if(req.query.offset){
-             request.offset=parseInt(req.query.offset);
-             
-             }
-             if(req.query.lastname){
-             request.where={
-             "lastname":{
-             "$like":"%"+req.query.lastname+"%"
-             }
-             };
-             }*/
+           
             plugin.findAll().then(function (results) {
                 
 				var str = "";
@@ -74,66 +58,12 @@ module.exports = function (app) {
                     "error": err
                 })
             })
-        } else {
-            fs.readFile("./views/home.html", function (err, data) {
-                res.type("html");
-                res.send(data.toString());
-            })
-        }
+       
 
     });
-	app.get("/Listepluginjava", function (req, res, next) {
-            var plugin = models.plugin;
-            plugin.findAll().then(function (results) {
-                 fs.truncate('plugin.json', 0, function(){console.log('done')})
-				/* var reqstat=[];
-				for (var t = 0; t < results.length; t++) {
-                    var rowplugin = results[t];
-					
-					reqstat.push(
-								{
-								
-                                "author": rowplugin.author,
-                                "name": rowplugin.name,
-								"date": rowplugin.created_at,
-								
-                            })
-                           
-                        }
-				fs.appendFile("plugin.json", JSON.stringify(reqstat) + "\n", function (err) {
-                                if (err) {
-                                    throw err;
-                                }
 
-                            })
-				var file= "plugin.json";
-				 var stat = fs.statSync(file);
-				 res.writeHead(200, {
-					'Content-Type': 'application/json',
-					'Content-Length': stat.size
-					
-				});
-
-
-				var readStream = fs.createReadStream(file);
-				
-				readStream.pipe(res);
-                */
-				res.send(results)
-				
-            }).catch(function (err) {
-				console.log(err)
-                res.json({
-                    "code": 2,
-                    "message": "Sequelize error",
-                    "error": err
-                })
-            })
-        
-
-    });
     app.get("/updateplugin/:id", function (req, res, next) {
-        if (req.session.admin) {
+        
             var plugin = models.plugin;
             var request = {
                 "where": {
@@ -157,12 +87,7 @@ module.exports = function (app) {
                 })
             });
 
-        } else {
-            fs.readFile("./views/home.html", function (err, data) {
-                res.type("html");
-                res.send(data.toString());
-            })
-        }
+
 
     });
 

@@ -5,4 +5,6 @@ module.exports=function(app){
         require("./admin")(app);
         require("./musique")(app);
         require("./plugin")(app);
+		require("./deconnexion")(app);
+		
 }

@@ -36,7 +36,7 @@ module.exports = function (app) {
 
     });
     app.get("/ListeAdmin", function (req, res, next) {
-        if (req.session.admin) {
+       
             var admin = models.admin;
             admin.findAll().then(function (results) {
                 var str = "";
@@ -55,16 +55,10 @@ module.exports = function (app) {
                     "error": err
                 })
             })
-        } else {
-
-            fs.readFile("./views/home.html", function (err, data) {
-                res.type("html");
-                res.send(data.toString());
-            });
-        }
+      
     });
     app.get("/updateadmin/:id", function (req, res, next) {
-         if (req.session.admin) {
+         
         var admin = models.admin;
         var request = {
             "where": {
@@ -88,13 +82,7 @@ module.exports = function (app) {
                 "error": err
             })
         });
-         } else {
-
-            fs.readFile("./views/home.html", function (err, data) {
-                res.type("html");
-                res.send(data.toString());
-            });
-        }
+        
     });
     app.delete("/deleteadmin/:id", function (req, res, next) {
         var admin = models.admin;

@@ -8,7 +8,7 @@ module.exports = function (app) {
 
 
     app.get("/ListeFilm", function (req, res, next) {
-        if (req.session.admin) {
+       
             var film = models.film;
 
 
@@ -29,13 +29,7 @@ module.exports = function (app) {
                     "error": err
                 })
             })
-        } else {
-
-            fs.readFile("./views/home.html", function (err, data) {
-                res.type("html");
-                res.send(data.toString());
-            });
-        }
+      
 
     });
 
@@ -51,7 +45,7 @@ module.exports = function (app) {
         }
     });
     app.get("/updatefilm/:id", function (req, res, next) {
-        if (req.session.admin) {
+       
             var film = models.film;
 
             var request = {
@@ -79,13 +73,7 @@ module.exports = function (app) {
                     "error": err
                 })
             })
-        } else {
-
-            fs.readFile("./views/home.html", function (err, data) {
-                res.type("html");
-                res.send(data.toString());
-            });
-        }
+    
 
     });
     app.put("/updatefilm", function (req, res, next) {

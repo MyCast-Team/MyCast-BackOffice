@@ -8,7 +8,7 @@ module.exports = function (app) {
     app.get("/ListeUser", function (req, res, next) {
         var user = models.user;
 
-        if (req.session.admin) {
+    
             user.findAll().then(function (results) {
                 var str = "";
                 for (var idx in results) {
@@ -26,13 +26,7 @@ module.exports = function (app) {
                     "error": err
                 })
             })
-        } else {
-
-            fs.readFile("./views/home.html", function (err, data) {
-                res.type("html");
-                res.send(data.toString());
-            });
-        }
+        
 
     });
     app.get("/:id/ListeFilm", function (req, res, next) {

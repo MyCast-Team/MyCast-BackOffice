@@ -16,7 +16,7 @@ module.exports = function (app) {
     });
 
     app.get("/ListeMusique", function (req, res, next) {
-        if (req.session.admin) {
+     
             var musique = models.musique;
 
             /*var request={};
@@ -53,16 +53,11 @@ module.exports = function (app) {
                     "error": err
                 })
             })
-        } else {
-            fs.readFile("./views/home.html", function (err, data) {
-                res.type("html");
-                res.send(data.toString());
-            })
-        }
+      
 
     });
     app.get("/updatemusique/:id", function (req, res, next) {
-        if (req.session.admin) {
+        
             var musique = models.musique;
             var request = {
                 "where": {
@@ -87,12 +82,7 @@ module.exports = function (app) {
                     "error": err
                 })
             });
-        } else {
-            fs.readFile("./views/home.html", function (err, data) {
-                res.type("html");
-                res.send(data.toString());
-            })
-        }
+      
 
 
     });
