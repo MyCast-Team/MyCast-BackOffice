@@ -107,7 +107,7 @@ module.exports = function (app) {
             })
         });
     });
-    app.put("/updateadmin", function (req, res, next) {
+    app.post("/updateadmin", function (req, res, next) {
         var admin = utils.admin;
         var confirm = 0;
         var request = {
@@ -120,10 +120,12 @@ module.exports = function (app) {
             attributes.login = req.body.login;
         }
 
-        if (req.body.mdp && req.body.cmdp) {
-            if (req.body.mdp == req.body.cmdp) {
-                var mdp = encrypt(new Buffer([req.body.mdp].toString()))
+        if (req.body.pass && req.body.cpass) {
+
+            if (req.body.pass == req.body.cpass) {
+                var mdp = encrypt(new Buffer([req.body.pass].toString()))
                 attributes.password = mdp;
+
             } else {
                 confirm = 1;
             }

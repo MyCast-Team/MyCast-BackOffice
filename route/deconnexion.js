@@ -5,7 +5,7 @@ var jwt = require('jsonwebtoken');
 var fs = require("fs");
 module.exports = function (app) {
 
-    app.delete("/Deco", function (req, res, next) {
+    app.get("/Deco", function (req, res, next) {
 			var tokenmodel=models.token;
 			var tokenutils=utils.token;
 

@@ -60,7 +60,7 @@ module.exports = function (app) {
 
 
     });
-    app.put("/updatefilm", function (req, res, next) {
+    app.post("/updatefilm", function (req, res, next) {
         var film = utils.film;
         var request = {
             "where": {

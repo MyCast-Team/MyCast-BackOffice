@@ -110,7 +110,7 @@ module.exports = function (app) {
             })
         });
     });
-    app.put("/updatemusique", function (req, res, next) {
+    app.post("/updatemusique", function (req, res, next) {
         var musique = utils.musique;
 
         var request = {

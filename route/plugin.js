@@ -3,7 +3,7 @@ var utils = require("../Utils");
 var multer = require("multer");
 var storage = multer.diskStorage({
     destination: function (req, file, callback) {
-        callback(null, '/uploads/');
+        callback(null, './uploads');
     },
     filename: function (req, file, callback) {
         callback(null, file.fieldname + '-' + file.originalname);
@@ -16,12 +16,17 @@ module.exports = function (app) {
     app.post("/plugin", multer({storage: storage}).single('plugin'), function (req, res, next) {
 
         var plugin = utils.plugin;
-
+        console.log("teeeeeeeeeeeeeeeeeeeesttttt")
         if (req.body.author) {
-            console.log(req.body.author);
+
 			if(req.file){
+            console.log("teeeeeeeeeeeeeeeeeeeesttttt222222222222")
+        console.log(req.file.originalname)
             var u1 = new plugin(req.file.originalname, req.body.author);
 			}else{
+            console.log("teeeeeeeeeeeeeeeeeeeesttttt222222222223333333333")
+            console.log(req.body)
+          console.log(req.file)
 			var u1 = new plugin(req.body.originalname, req.body.author);
 			}
 
@@ -40,7 +45,7 @@ module.exports = function (app) {
             });
 
         }
-		console.log("fin du game")
+
     });
 
     app.get("/Listeplugin", function (req, res, next) {
@@ -123,7 +128,7 @@ module.exports = function (app) {
             })
         });
     });
-    app.put("/updateplugin", function (req, res, next) {
+    app.post("/updateplugin", function (req, res, next) {
         var plugin = utils.plugin;
         var request = {
             "where": {

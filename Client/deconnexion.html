@@ -25,17 +25,15 @@
     </body>
 </html>
 <script type='text/javascript'>
-$("#form").on('click',function(){
-  $.ajax({
-       url : '/connection',
-       type : 'post',
-       data : $("#data").serialize(),
-       success : function(html){
-        window.location.href ="/listuser.html"
-       },
-       error : function(err){
-         location.reload();
-       }
-  })
-})
+$.ajax({
+     url : '/Deco',
+     type : 'get',
+     success : function(html){
+      window.location.href ="/index.html"
+    },
+
+     error : function(err){
+       location.reload();
+     }
+});
 </script>

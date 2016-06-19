@@ -145,6 +145,7 @@ app.post("/connection", function (req, res, next) {
 
 			u1.addtoken(u1,function(err, token){
 				if(err){
+            res.statut=500;
 					  res.json({
 						"code": 2,
 						"message": "Sequelize error",
@@ -162,7 +163,7 @@ app.post("/connection", function (req, res, next) {
 
 
         } else {
-         //   req.session.admin = false;
+            res.status(500)//faire reagir la balise error de l'appel ajax
              res.json({
              "code": 2,
              "message": "Sequelize error",

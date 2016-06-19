@@ -8,46 +8,72 @@
     <body>
         <div>
 
-            <ul class="nav nav-tabs">
-                <li><a href="/listuser.html">Liste User</a></li>
-                <li><a href="/listfilm.html">Liste Film</a></li>
-                <li><a href="/ListeMusique">Liste Musique</a></li>
-                <li><a href="/ListeAdmin">Liste Administrateur</a></li>
-                 <li><a href="/ListePlugin">Liste Plugins</a></li>
-				 	<li><a href="/Deco">Deconnexion</a></li>
-            </ul>
+          <ul class="nav nav-tabs">
+              <li><a href="/listuser.html">Liste Users</a></li>
+              <li><a href="/listfilm.html">Liste Films</a></li>
+              <li><a href="/listmusique.html">Liste Musiques</a></li>
+              <li><a href="/listadmin.html">Liste Administrateurs</a></li>
+              <li><a href="/listplugin.html">Liste Plugins</a></li>
+      <li><a href="/deconnexion.html">Deconnexion</a></li>
+          </ul>
         </div>
         <ul id="list">
-            $val
-        </ul>
-        Ajouter une musique :
-        <form action="/addmusique" method="post">
 
-            Chanteur :<input type="text" name="singer">
-            Producteur: <input type="text" name="producer">
-            Titre: <input type="text" name="title">
-            Type: <input type="text" name="type">
-            <input type="submit" value="valider">
+        </ul>
+        <button id='addbutton'>Add music</button>
+        <div id="add" class="hidden">
+        <form id="addmusique" method="post">
+          titre:  <input type="text" name="title">
+          chanteur:  <input type="text" name="singer">
+          producteur  <input type="text" name="producer">
+          type  <input type="text" name="type">
+          <!--<input type="text" name="date">-->
+            <input type="button"  id="buttonadd" value="valider">
         </form>
-    </body>
+      </div>
+      <div id="update" class="hidden">
+      <form action="/updatemusique" id="updateform" method="post">
+          <input type="hidden" id="idfield" name="id">
+          <input type="text"  id="titlefield" name="title">
+          <input type="text" id="singerfield" name="singer">
+          <input type="text"  id="producerfield" name="producer">
+          <input type="text"  id="typefield" name="type">
+        <!--  <input type="text" id="datefield" name="date">-->
+          <input type="button" id="updatebutton" value="valider">
+      </form>
+    </div>
+  </body>
 </html>
 
 <script type="text/javascript">
+$.ajax({
+     url : '/ListeMusique',
+     type : 'get',
+     success : function(html){
+       var items = [];
+      $.each( html, function( key, val ) {
 
-    $('#list').on('click', 'li a#deletemusique', function (e) {
+        items.push("<li >" + val.title + "<button id='deletemusic' value="+val.id+">Delete</button><button id='updatemusic' value="+val.id+">Update</button></li> ");
+      });
+      $("#list").append(items);
+    },
+     error : function(err){
+     window.location.href="/index.html"
+     }
+});
+    $('#list').on('click', '#deletemusic', function (e) {
 
-        event.preventDefault();
 
         // Pop up a confirmation dialog
-        var confirmation = confirm('Are you sure you want to delete this admin?');
+        var confirmation = confirm('Are you sure you want to delete this music?');
 
-        // Check and make sure the film confirmed
+        // Check and make sure the user confirmed
         if (confirmation === true) {
 
             // If they did, do our delete
             $.ajax({
                 method: 'DELETE',
-                url: '/deletemusique/' + $(this).attr('rel')
+                url: '/deletemusique/' + $(this).attr('value')
             }).done(function (response) {
 
                 // Check for a successful (blank) response
@@ -63,5 +89,49 @@
         }
     });
 
+    $('#list').on('click', '#updatemusic', function (e) {
+            $.ajax({
+                method: 'GET',
+                url: '/updatemusique/' + $(this).attr('value')
+            }).done(function (response) {
 
-</script>
+                $("#update").removeClass("hidden")
+                // Check for a successful (blank) response
+
+                  $("#idfield").val(response.id);
+                  $("#singerfield").val(response.singer);
+                  $("#producerfield").val(response.producer);
+                  $("#titlefield").val(response.title);
+                  $("#typefield").val(response.type);
+                //  $("#datefield").val(response.date);
+
+            });
+
+
+    });
+    $("#updatebutton").on('click', function(){
+      $.ajax({
+          method: 'POST',
+          data:$("#updateform").serialize(),
+          url: '/updatemsuique'
+      }).done(function (response) {
+        alert("Updated")
+
+      });
+
+
+    })
+    $("#buttonadd").on('click', function(){
+      $.ajax({
+          method: 'POST',
+          data:$("#addmusique").serialize(),
+          url: '/addmusique'
+      }).done(function (response) {
+        alert("music added")
+        location.reload();
+      })
+    })
+    $("#addbutton").on('click', function(){
+      $("#add").removeClass("hidden");
+
+    })</script>
