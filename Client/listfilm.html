@@ -1,0 +1,109 @@
+<html>
+    <head>
+        <link href="/css/bootstrap.css" rel="stylesheet">
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/jquery.js"></script>
+        <title>WebApp</title>
+    </head>
+    <body>
+        <div>
+
+            <ul class="nav nav-tabs">
+                <li><a href="/listuser.html">Liste User</a></li>
+                <li><a href="/listfilm.html">Liste Film</a></li>
+                <li><a href="/ListeMusique">Liste Musique</a></li>
+                <li><a href="/ListeAdmin">Liste Administrateur</a></li>
+                 <li><a href="/ListePlugin">Liste Plugins</a></li>
+				 	<li><a href="/Deco">Deconnexion</a></li>
+            </ul>
+        </div>
+        <ul id="list">
+
+        </ul>
+        <button id='addbutton'>Add movie</button>
+        <div id="add" class="hidden">
+        <form action="/addfilm" method="post">
+            <input type="text" name="title">
+            <input type="text" name="director">
+            <input type="text" name="date">
+            <input type="submit" value="valider">
+        </form>
+      </div>
+      <div id="update" class="hidden">
+      <form action="/updatefilm" method="post">
+          <input type="hidden" id="idfield" name="id">
+          <input type="text"  id="titlefield" name="title">
+          <input type="text" id="directorfield" name="director">
+          <input type="text" id="datefield" name="date">
+          <input type="submit" value="valider">
+      </form>
+    </div>
+    </body>
+</html>
+<script type="text/javascript">
+$.ajax({
+     url : '/ListeFilm',
+     type : 'get',
+     success : function(html){
+       var items = [];
+      $.each( html, function( key, val ) {
+
+        items.push("<li >" + val.name + "<button id='deletemovie' value="+val.id+">Delete</button><button id='updatemovie' value="+val.id+">Update</button></li> ");
+      });
+      $("#list").append(items);
+    },
+     error : function(err){
+       location.reload();
+     }
+});
+    $('#list').on('click', '#deletemovie', function (e) {
+
+
+        // Pop up a confirmation dialog
+        var confirmation = confirm('Are you sure you want to delete this movie?');
+
+        // Check and make sure the user confirmed
+        if (confirmation === true) {
+
+            // If they did, do our delete
+            $.ajax({
+                method: 'DELETE',
+                url: '/deletefilm/' + $(this).attr('value')
+            }).done(function (response) {
+                alert(response)
+                // Check for a successful (blank) response
+                location.reload();
+            });
+
+        }
+        else {
+
+            // If they said no to the confirm, do nothing
+            return false;
+
+        }
+    });
+
+    $('#list').on('click', '#updatemovie', function (e) {
+            $.ajax({
+                method: 'GET',
+                url: '/updatefilm/' + $(this).attr('value')
+            }).done(function (response) {
+                alert(response)
+                $("#update").removeClass("hidden")
+                // Check for a successful (blank) response
+                  alert(response.name);
+                  $("#idfield").val(response.id);
+                  $("#titlefield").val(response.name);
+                  $("#directorfield").val(response.director);
+                  $("#datefield").val(response.date);
+
+            });
+
+
+    });
+    $("#addbutton").on('click', function(){
+      $("#add").removeClass("hidden");
+
+    })
+</script>

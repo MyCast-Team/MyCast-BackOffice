@@ -8,19 +8,12 @@ module.exports = function (app) {
 
 
     app.get("/ListeFilm", function (req, res, next) {
-       
+
             var film = models.film;
 
 
             film.findAll().then(function (results) {
-                var str = "";
-                for (var idx in results) {
-                    str += "<li>" + results[idx].name + "    " + "<a id='deletefilm' href='#' rel=" + results[idx].id + ">delete</a>/<a href='/updatefilm/" + results[idx].id + "'>update</a></li>"
-                }
-                fs.readFile("./views/listfilm.html", function (err, data) {
-                    res.type("html");
-                    res.send(data.toString().split("$val").join(str));
-                });
+              res.send(results);
             }).catch(function (err) {
 
                 res.json({
@@ -29,7 +22,7 @@ module.exports = function (app) {
                     "error": err
                 })
             })
-      
+
 
     });
 
@@ -40,12 +33,12 @@ module.exports = function (app) {
         var u1 = new film();
         if (req.params.id) {
             u1.delete(req.params.id, function (result) {
-                res.send("/ListeFilm");
+                res.send(result);
             });
         }
     });
     app.get("/updatefilm/:id", function (req, res, next) {
-       
+
             var film = models.film;
 
             var request = {
@@ -55,16 +48,7 @@ module.exports = function (app) {
             }
             film.find(request).then(function (results) {
 
-                var str = "<input type='hidden' name='id' value='" + results.id + "'>";
-                str += "<input type='text' name='name' value='" + results.name + "'>";
-                str += "<input type='text' name='director' value='" + results.director + "'>";
-                str += "<input type='text' name='date' value='" + results.date + "'>";
-
-
-                fs.readFile("./views/updatefilm.html", function (err, data) {
-                    res.type("html");
-                    res.send(data.toString().split("$val").join(str));
-                });
+                res.send(results)
             }).catch(function (err) {
 
                 res.json({
@@ -73,7 +57,7 @@ module.exports = function (app) {
                     "error": err
                 })
             })
-    
+
 
     });
     app.put("/updatefilm", function (req, res, next) {
@@ -115,7 +99,7 @@ module.exports = function (app) {
 
             var u1 = new film(title, director, date);
             u1.addfilm(u1, function (err, data) {
-                res.redirect("/ListeFilm")
+                res.send(data)
             });
 
         }
