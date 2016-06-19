@@ -17,7 +17,9 @@ tokenUtils.prototype.addtoken=function(u1,callback){
 			callback(undefined,result)
 		}).catch(function(err){
 			console.log("token pas créer")
-			console.log(err)
+			callback(err,undefined);
+				
+			
 		});
 		
 	
@@ -33,9 +35,10 @@ tokenUtils.prototype.delete = function(idtoken, callback) {
 		}).then(function(result) {
 			if(result) {
 				result.destroy().then(function(success) {
-					callback(success);
+					callback(undefined,success);
 				}).catch(function(err) {
-					callback(err);
+					callback(err,undefined);
+					console.log(err);
 				});
 			} else {
 				callback("error can't find "+idtoken);

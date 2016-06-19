@@ -1,8 +1,8 @@
 var express = require("express");
 var app = express();
-
+module.exports = app;
 var session = require('express-session');
-var jwt = require('jsonwebtoken'); 
+var jwt = require('jsonwebtoken');
 //var jwtCheck = require('express-jwt');
 var bodyparser = require("body-parser");
 var crypto = require("crypto");
@@ -11,7 +11,7 @@ var models = require("./models");
 var utils = require("./Utils");
 var busboy = require('connect-busboy');
 //var cookie=require('cookie-parser');
-var apiRoutes = express.Router(); 
+var apiRoutes = express.Router();
 var secret = '42';
 
 app.set('superSecret',secret);
@@ -34,17 +34,17 @@ app.use(session({
     secret: '2C44-4D44-WppQ38S',
     resave: true,
     saveUninitialized: true,
-    cookie:{maxAge:36000}
+    cookie:{maxAge:360000}
 }));
 
 app.use(bodyparser.urlencoded({
-    "extended": false
+    "extended": true
 
 }));
 
 app.use(function(req, res, next) {
     if(Date.now()>req.session.cookie.expires){
-        
+
         console.log("test maxage");
        req.session.destroy();
     }
@@ -53,31 +53,33 @@ app.use(function(req, res, next) {
   next();
 });
 
-	
-	
+
+
 
 app.use(busboy());
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css')); // redirect CSS bootstrap
 app.use('/js', express.static(__dirname + '/node_modules/jquery/dist')); // redirect CSS bootstrap
-
+app.use("/",express.static('Client'))
 apiRoutes.use(function(req, res, next) {
 
   // check header or url parameters or post parameters for token
  // req.headers.authorization=153365;
-	
-  var token =req.session.token;
-	
-	
+
+  var token =(req.session.token) || (req.body.token);
+
+	console.log(req.body.token);
+
+	console.log(token);
   // decode token
   if (token) {
 
     // verifies secret and checks exp
-    jwt.verify(token, app.get('superSecret'), function(err, decoded) {      
+    jwt.verify(token, app.get('superSecret'), function(err, decoded) {
       if (err) {
         console.log(err);
       } else {
         // if everything is good, save to request for use in other routes
-        req.decoded = decoded;    
+        req.decoded = decoded;
         next();
       }
     });
@@ -85,11 +87,12 @@ apiRoutes.use(function(req, res, next) {
   } else {
 
 
-     fs.readFile("./views/connection.html", function (err, data) {
-                res.type("html");
-                res.send(data.toString().split("$val").join("No token provided."));
-            })
-    
+    res.json({
+    "code": 2,
+    "message": "Sequelize error",
+    "error": "no Token provided"
+  })
+
   }
 });
 var preExit = [];
@@ -120,17 +123,11 @@ process.on ('uncaughtException', function (err) {
   process.exit (1);
 });
 
-app.get("/", function (req, res, next) {
-    
-    fs.readFile("./views/home.html", function (err, data) {
-        res.type("html");
-        res.send(data.toString());
-    })
-}
-);
+
 app.post("/connection", function (req, res, next) {
     var admin = models.admin;
 	var Token = utils.token;
+
     var request = {
         "where": {
             login: req.body.login,
@@ -140,31 +137,37 @@ app.post("/connection", function (req, res, next) {
     admin.findOne(request).then(function (results) {
         if (results) {
             //session if cette session correct autoriser connection
-			
-		
+
+
 			var u1=new Token(results.id);
-			
-			
-			
+
+
+
 			u1.addtoken(u1,function(err, token){
-				var token = jwt.sign(results.id, app.get('superSecret'));
-				console.log(token)
-				req.session.token = token;
-			 fs.readFile("./views/connection.html", function (err, data) {
-                res.type("html");
-                res.send(data.toString().split("$val").join("Login success"));
-            })
-				
-					
+				if(err){
+					  res.json({
+						"code": 2,
+						"message": "Sequelize error",
+						"error": err
+					})
+				}else{
+						var token = jwt.sign(results.id, app.get('superSecret'));
+						console.log(token)
+						req.session.token = token;
+					  res.send(token)
+
+
+				}
 			});
-		
+
+
         } else {
          //   req.session.admin = false;
-			
-            fs.readFile("./views/connection.html", function (err, data) {
-                res.type("html");
-                res.send(data.toString().split("$val").join("Login failed"));
-            })
+             res.json({
+             "code": 2,
+             "message": "Sequelize error",
+             "error": "No result"
+           })
         }
     }).catch(function (err) {
 		console.log(err)
@@ -182,10 +185,10 @@ app.get("/Listepluginjava", function (req, res, next) {
 			console.log("test")
             plugin.findAll().then(function (results) {
                  fs.truncate('plugin.json', 0, function(){console.log('done')})
-				
-               
+
+
 				res.send(results)
-				
+
             }).catch(function (err) {
 				console.log(err)
                 res.json({
@@ -194,11 +197,11 @@ app.get("/Listepluginjava", function (req, res, next) {
                     "error": err
                 })
             })
-        
+
 
     });
 	app.get("/getpluginjava/:id", function (req, res, next) {
-        
+
             var plugin = models.plugin;
             var request = {
                 "where": {
@@ -211,9 +214,9 @@ app.get("/Listepluginjava", function (req, res, next) {
 				  console.log(filePath)
 					res.sendFile(__dirname+filePath)
 
-			
 
-				
+
+
             }).catch(function (err) {
 				console.log(err)
                 res.json({
@@ -223,7 +226,7 @@ app.get("/Listepluginjava", function (req, res, next) {
                 })
             });
 
-      
+
 
     });
 app.use(apiRoutes);

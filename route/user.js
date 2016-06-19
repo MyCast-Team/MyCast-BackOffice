@@ -8,16 +8,9 @@ module.exports = function (app) {
     app.get("/ListeUser", function (req, res, next) {
         var user = models.user;
 
-    
+
             user.findAll().then(function (results) {
-                var str = "";
-                for (var idx in results) {
-                    str += "<li>" + results[idx].id + "    " + "<a id='deleteuser' href='#' rel=" + results[idx].id + ">delete</a></li>"
-                }
-                fs.readFile("./views/listuser.html", function (err, data) {
-                    res.type("html");
-                    res.send(data.toString().split("$val").join(str));
-                });
+                res.send(results);
             }).catch(function (err) {
 
                 res.json({
@@ -26,7 +19,7 @@ module.exports = function (app) {
                     "error": err
                 })
             })
-        
+
 
     });
     app.get("/:id/ListeFilm", function (req, res, next) {
@@ -37,8 +30,8 @@ module.exports = function (app) {
         var userresult="";
         var movieresult="";
         var userfilm = models.userfilm;
-        
-        
+
+
 
             user.findAll().then(function (results) {
                 nbuser = results.length;
@@ -63,14 +56,14 @@ module.exports = function (app) {
                 })
             })
             userfilm.findAll().then(function (results) {
-               
+
                 var matrice = math.matrix();
-              
+
                 matrice.resize([nbuser, nbmovie]);
-                
+
                 var matriceprime = math.matrix();
                 matriceprime.resize([nbmovie, nbuser]);
-                
+
                 for (var i = 0, len = results.length; i < len; i++) {
                     var row = results[i];
 
@@ -92,11 +85,11 @@ module.exports = function (app) {
              for (var t = 0; t < userresult.length; t++) {
                     var rowuser = userresult[t];
                     console.log(t)
-                    
+
                     for (var i = 0, len = movieresult.length; i < len; i++) {
-                        console.log(i) 
+                        console.log(i)
                         var row = movieresult[i];
-                       
+
 
                         if (matrice5.subset(math.index(t, i)) != 0 && rowuser.id==req.params.id) {
                             var reqstat = {
@@ -124,7 +117,7 @@ module.exports = function (app) {
                     "error": err
                 })
             })
-        
+
     });
 
 
@@ -137,9 +130,9 @@ module.exports = function (app) {
         var nbmusique = 0;
         var userresult="";
         var musiqueresult="";
-      
-        
-        
+
+
+
 
             user.findAll().then(function (results) {
                 nbuser = results.length;
@@ -164,14 +157,14 @@ module.exports = function (app) {
                 })
             })
             usermusique.findAll().then(function (results) {
-               
+
                 var matrice = math.matrix();
-              
+
                 matrice.resize([nbuser, nbmusique]);
-                
+
                 var matriceprime = math.matrix();
                 matriceprime.resize([nbmusique, nbuser]);
-                
+
                 for (var i = 0, len = results.length; i < len; i++) {
                     var row = results[i];
 
@@ -193,11 +186,11 @@ module.exports = function (app) {
              for (var t = 0; t < userresult.length; t++) {
                     var rowuser = userresult[t];
                     console.log(t)
-                    
+
                     for (var i = 0, len = musiqueresult.length; i < len; i++) {
-                        console.log(i) 
+                        console.log(i)
                         var row = musiqueresult[i];
-                       
+
 
                         if (matrice5.subset(math.index(t, i)) != 0 && rowuser.id==req.params.id) {
                             var reqstat = {
@@ -225,7 +218,7 @@ module.exports = function (app) {
                     "error": err
                 })
             })
-        
+
     });
 
 
@@ -239,7 +232,7 @@ module.exports = function (app) {
         var u1 = new user();
         if (req.params.id) {
             u1.delete(req.params.id, function (result) {
-                res.send("/ListeUser");
+                res.send(result);
             });
         }
     });
@@ -247,7 +240,7 @@ module.exports = function (app) {
         var user = utils.user;
         var u1 = new user();
         u1.adduser(u1, function (undefined, result) {
-            res.redirect("/ListeUser");
+          res.send(result)
         });
 
 

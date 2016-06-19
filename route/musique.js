@@ -8,7 +8,7 @@ module.exports = function (app) {
         if (req.body.singer && req.body.producer && req.body.title && req.body.type) {
             var u1 = new musique(req.body.singer, req.body.producer, req.body.title, req.body.type);
             u1.addmusique(u1, function (err, data) {
-                res.redirect("/ListeMusique")
+            res.send(data);
             });
 
         }
@@ -16,18 +16,18 @@ module.exports = function (app) {
     });
 
     app.get("/ListeMusique", function (req, res, next) {
-     
+
             var musique = models.musique;
 
             /*var request={};
              if(req.query.limit){
              request.limit=parseInt(req.query.limit);
-             
-             
+
+
              }
              if(req.query.offset){
              request.offset=parseInt(req.query.offset);
-             
+
              }
              if(req.query.lastname){
              request.where={
@@ -37,14 +37,7 @@ module.exports = function (app) {
              };
              }*/
             musique.findAll().then(function (results) {
-                var str = "";
-                for (var idx in results) {
-                    str += "<li>" + results[idx].title + "    " + "<a id='deletemusique' href='#' rel=" + results[idx].id + ">delete</a>/<a href='/updatemusique/" + results[idx].id + "'>update</a></li>"
-                }
-                fs.readFile("./views/listmusique.html", function (err, data) {
-                    res.type("html");
-                    res.send(data.toString().split("$val").join(str));
-                });
+                res.send(results);
             }).catch(function (err) {
 
                 res.json({
@@ -53,11 +46,11 @@ module.exports = function (app) {
                     "error": err
                 })
             })
-      
+
 
     });
     app.get("/updatemusique/:id", function (req, res, next) {
-        
+
             var musique = models.musique;
             var request = {
                 "where": {
@@ -65,16 +58,7 @@ module.exports = function (app) {
                 }
             }
             musique.find(request).then(function (results) {
-                var str = "<input type='hidden' name='id' value='" + results.id + "'>";
-                str += "<input type='text' name='singer' value='" + results.singer + "'>";
-                str += "<input type='text' name='producer' value='" + results.producer + "'>";
-                str += "<input type='text' name='title' value='" + results.title + "'>";
-                str += "<input type='text' name='type' value='" + results.type + "'>";
-
-                fs.readFile("./views/updatemusique.html", function (err, data) {
-                    res.type("html");
-                    res.send(data.toString().split("$val").join(str));
-                });
+                res.send(results)
             }).catch(function (err) {
                 res.json({
                     "code": 2,
@@ -82,7 +66,7 @@ module.exports = function (app) {
                     "error": err
                 })
             });
-      
+
 
 
     });
@@ -153,7 +137,16 @@ module.exports = function (app) {
 
         var u1 = new musique();
         u1.update(request, attributes, function (err, data) {
-            res.send("/ListeMusique");
+          if(err){
+            res.json({
+                "code": 2,
+                "message": "blaSequelize error",
+                "error": err
+            })
+          }else{
+            res.send(data)
+          }
+
         });
 
 

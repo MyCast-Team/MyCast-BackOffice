@@ -36,17 +36,10 @@ module.exports = function (app) {
 
     });
     app.get("/ListeAdmin", function (req, res, next) {
-       
+
             var admin = models.admin;
             admin.findAll().then(function (results) {
-                var str = "";
-                for (var idx in results) {
-                    str += "<li>" + results[idx].login + "    " + "<a id='deleteadmin' href='#' rel=" + results[idx].id + ">delete</a>/<a href='/updateadmin/" + results[idx].id + "'>update</a></li>"
-                }
-                fs.readFile("./views/listadmin.html", function (err, data) {
-                    res.type("html");
-                    res.send(data.toString().split("$val").join(str));
-                });
+              res.send(results)
             }).catch(function (err) {
 
                 res.json({
@@ -55,10 +48,10 @@ module.exports = function (app) {
                     "error": err
                 })
             })
-      
+
     });
     app.get("/updateadmin/:id", function (req, res, next) {
-         
+
         var admin = models.admin;
         var request = {
             "where": {
@@ -66,15 +59,7 @@ module.exports = function (app) {
             }
         }
         admin.find(request).then(function (results) {
-            var str = "<input type='hidden' name='id' value='" + results.id + "'>";
-            str += "<input type='text' name='login' value='" + results.login + "'>";
-            str += "<input type='text' name='email' value='" + results.email + "'>";
-            str += "<input type='password' name='mdp'>";
-            str += "<input type='password' name='cmdp'>";
-            fs.readFile("./views/updateadmin.html", function (err, data) {
-                res.type("html");
-                res.send(data.toString().split("$val").join(str));
-            });
+            res.send(results)
         }).catch(function (err) {
             res.json({
                 "code": 2,
@@ -82,7 +67,7 @@ module.exports = function (app) {
                 "error": err
             })
         });
-        
+
     });
     app.delete("/deleteadmin/:id", function (req, res, next) {
         var admin = models.admin;
@@ -152,14 +137,14 @@ module.exports = function (app) {
         if (confirm != 1) {
             var u1 = new admin();
             u1.update(request, attributes, function (err, data) {
-                res.send("/ListeAdmin");
+                res.send(data);
             });
         } else {
-            fs.readFile("./views/listadmin.html", function (err, data) {
-                var str = "Error in password confirmation"
-                res.type("html");
-                res.send(data.toString().split("$val").join(str));
-            });
+          res.json({
+              "code": 2,
+              "message": "Sequelize error",
+              "error": "Wrong password"
+          })
         }
     });
 }

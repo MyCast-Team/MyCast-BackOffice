@@ -14,7 +14,7 @@ var storage = multer.diskStorage({
 var fs = require("fs");
 module.exports = function (app) {
     app.post("/plugin", multer({storage: storage}).single('plugin'), function (req, res, next) {
-		
+
         var plugin = utils.plugin;
 
         if (req.body.author) {
@@ -24,11 +24,19 @@ module.exports = function (app) {
 			}else{
 			var u1 = new plugin(req.body.originalname, req.body.author);
 			}
-			
-			
+
+
             u1.addplugin(u1, function (err, data) {
-			
-                res.redirect("/ListePlugin")
+			           if(err){
+                   res.json({
+                       "code": 2,
+                       "message": "Sequelize error",
+                       "error": err
+                   })
+                 }else{
+                     res.send(data);
+                 }
+
             });
 
         }
@@ -36,20 +44,12 @@ module.exports = function (app) {
     });
 
     app.get("/Listeplugin", function (req, res, next) {
-        
+
             var plugin = models.plugin;
 
-           
+
             plugin.findAll().then(function (results) {
-                
-				var str = "";
-                for (var idx in results) {
-                    str += "<li>" + results[idx].name + "    " + "<a id='deleteplugin' href='#' rel=" + results[idx].id + ">delete</a>/<a href='/updateplugin/" + results[idx].id + "'>update</a></li>"
-                }
-                fs.readFile("./views/listplugin.html", function (err, data) {
-                    res.type("html");
-                    res.send(data.toString().split("$val").join(str));
-                });
+              res.send(results);
             }).catch(function (err) {
 
                 res.json({
@@ -58,12 +58,12 @@ module.exports = function (app) {
                     "error": err
                 })
             })
-       
+
 
     });
 
     app.get("/updateplugin/:id", function (req, res, next) {
-        
+
             var plugin = models.plugin;
             var request = {
                 "where": {
@@ -71,14 +71,7 @@ module.exports = function (app) {
                 }
             }
             plugin.find(request).then(function (results) {
-                var str = "<input type='hidden' name='id' value='" + results.id + "'>";
-                str += "<input type='text' name='name' value='" + results.name + "'>";
-                str += "<input type='text' name='author' value='" + results.author + "'>";
-
-                fs.readFile("./views/updateplugin.html", function (err, data) {
-                    res.type("html");
-                    res.send(data.toString().split("$val").join(str));
-                });
+                res.send(results);
             }).catch(function (err) {
                 res.json({
                     "code": 2,
@@ -157,6 +150,6 @@ module.exports = function (app) {
 
 
     });
-	
+
 
 }
