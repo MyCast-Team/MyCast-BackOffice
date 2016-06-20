@@ -1,5 +1,6 @@
 var express = require("express");
 var app = express();
+require("env.js");
 module.exports = app;
 var session = require('express-session');
 var jwt = require('jsonwebtoken');
