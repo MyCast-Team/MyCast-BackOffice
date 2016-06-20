@@ -1,12 +1,12 @@
-var models=require("../models");
+var models=require("../Models");
 
 var filmutils=function(name,director,date){
-	
+
 	this.name=name;
 	this.director=director;
 	this.date=date;
 
-	
+
 }
 
 filmutils.prototype.addfilm=function(u1,callback){
@@ -16,40 +16,40 @@ filmutils.prototype.addfilm=function(u1,callback){
 			"name":u1.name,
 			"director" : u1.director,
 			"date": u1.date
-		
-			
+
+
 		}).then(function(result){
-			console.log("film créer")
+			console.log("film crï¿½er")
 			callback(undefined,result)
 		}).catch(function(err){
-			console.log("film pas créer")
+			console.log("film pas crï¿½er")
 		});
-		
-	
+
+
 	}
 }
 filmutils.prototype.update=function(request,attributes,callback){
 		var film=models.film;
-  
+
 		film.find(request).then(function(results){
 			if(results){
-			
+
 				results.updateAttributes(attributes).then(function(results){
 					console.log("film update");
 					callback(results);
-					
-					
+
+
 				}).catch(function(err){
 					console.log("film pas  update");
 				})
 			}else{
 				console.log("pas de result")
 			}
-		
+
 		}).catch(function(err){
 			console.log(err);
 		});
-		
+
 }
 filmutils.prototype.delete = function(idfilm, callback) {
 	var film = models.film;

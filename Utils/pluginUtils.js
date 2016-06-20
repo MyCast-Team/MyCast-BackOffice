@@ -1,53 +1,53 @@
-var models=require("../models");
+var models=require("../Models");
 var pluginutils=function(name,author){
-	
+
 	this.name=name;
 	this.author=author;
-	
-	
+
+
 }
 
 pluginutils.prototype.addplugin=function(u1,callback){
 		var plugin=models.plugin;
 		if(u1){
 		plugin.create({
-			
+
 			"name" : u1.name,
 			"author": u1.author
-			
-			
-			
+
+
+
 		}).then(function(result){
-			console.log("plugin créer")
+			console.log("plugin crï¿½er")
 			callback(undefined,result)
 		}).catch(function(err){
-			console.log("plugin pas créer")
+			console.log("plugin pas crï¿½er")
 		});
-		
-	
+
+
 	}
 }
 pluginutils.prototype.update=function(request,attributes,callback){
 		var plugin=models.plugin;
 		plugin.find(request).then(function(results){
 			if(results){
-			
+
 				results.updateAttributes(attributes).then(function(results){
 					console.log("plugin update");
 					callback(undefined,results);
-					
-					
+
+
 				}).catch(function(err){
 					console.log("plugin pas  update");
 				})
 			}else{
 				console.log("pas de result")
 			}
-		
+
 		}).catch(function(err){
 			console.log(err);
 		});
-		
+
 }
 pluginutils.prototype.delete = function(idplugin, callback) {
 	var plugin = models.plugin;

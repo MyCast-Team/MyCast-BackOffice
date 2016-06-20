@@ -1,54 +1,54 @@
-var models=require("../models");
+var models=require("../Models");
 var adminutils=function(login,password,email){
-	
+
 	this.login=login;
 	this.password=password;
 	this.email=email;
-	
-	
+
+
 }
 
 adminutils.prototype.addadmin=function(u1,callback){
 		var admin=models.admin;
 		if(u1){
 		admin.create({
-			
+
 			"login" : u1.login,
 			"password": u1.password,
 			"email" : u1.email
-			
-			
+
+
 		}).then(function(result){
-			console.log("admin créer")
+			console.log("admin crï¿½er")
 			callback(undefined,result)
 		}).catch(function(err){
-			console.log("admin pas créer")
+			console.log("admin pas crï¿½er")
 		});
-		
-	
+
+
 	}
 }
 adminutils.prototype.update=function(request,attributes,callback){
 		var admin=models.admin;
 		admin.find(request).then(function(results){
 			if(results){
-			
+
 				results.updateAttributes(attributes).then(function(results){
 					console.log("admin update");
 					callback(undefined,results);
-					
-					
+
+
 				}).catch(function(err){
 					console.log("admin pas  update");
 				})
 			}else{
 				console.log("pas de result")
 			}
-		
+
 		}).catch(function(err){
 			console.log(err);
 		});
-		
+
 }
 adminutils.prototype.delete = function(idAdmin, callback) {
 	var admin = models.admin;

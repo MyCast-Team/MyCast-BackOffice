@@ -1,12 +1,12 @@
-var models=require("../models");
+var models=require("../Models");
 var musiqueutils=function(singer,producer,title,type){
-	
+
 	this.singer=singer;
 	this.producer=producer;
 	this.title=title;
 	this.type=type;
 
-	
+
 }
 
 musiqueutils.prototype.addmusique=function(u1,callback){
@@ -17,40 +17,40 @@ musiqueutils.prototype.addmusique=function(u1,callback){
 			"producer" : u1.producer,
 			"title": u1.title,
 			"type" : u1.type
-			
-			
+
+
 		}).then(function(result){
-			console.log("musique créer")
+			console.log("musique crï¿½er")
 			callback(undefined,result)
 		}).catch(function(err){
-			console.log("musique pas créer")
+			console.log("musique pas crï¿½er")
 		});
-		
-	
+
+
 	}
 }
 musiqueutils.prototype.update=function(request,attributes,callback){
 		var musique=models.musique;
-               
+
 		musique.find(request).then(function(results){
 			if(results){
-			
+
 				results.updateAttributes(attributes).then(function(results){
 					console.log("musique update");
 					callback(undefined,results);
-					
-					
+
+
 				}).catch(function(err){
 					console.log("musique pas  update");
 				})
 			}else{
 				console.log("pas de result")
 			}
-		
+
 		}).catch(function(err){
 			console.log(err);
 		});
-		
+
 }
 musiqueutils.prototype.delete = function(idmusique, callback) {
 	var musique = models.musique;
