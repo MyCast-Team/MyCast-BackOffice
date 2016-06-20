@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "author": "pierre",
   "license": "ISC",
@@ -35,5 +35,8 @@
     "supertest-session": "^2.0.1",
     "test": "^0.6.0",
     "tough-cookie": "^2.2.2"
+  },
+  "devDependencies": {
+    "mocha": "^2.5.3"
   }
 }
