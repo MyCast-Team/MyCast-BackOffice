@@ -1,1 +1,2 @@
-process.env['user'] = "root"
+process.env['MYSQL_USER'] = "root"
+process.env['MYSQL_PASSWORD'] = ""
