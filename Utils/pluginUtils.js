@@ -1,4 +1,4 @@
-var models=require("../Models");
+var models=require("../models");
 var pluginutils=function(name,author){
 
 	this.name=name;

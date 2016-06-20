@@ -1,4 +1,4 @@
-var models=require("../Models");
+var models=require("../models");
 var userutils=function(idlibrary){
 
 	this.idlibrary=idlibrary;

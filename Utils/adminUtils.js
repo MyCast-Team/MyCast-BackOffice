@@ -1,4 +1,4 @@
-var models=require("../Models");
+var models=require("../models");
 var adminutils=function(login,password,email){
 
 	this.login=login;

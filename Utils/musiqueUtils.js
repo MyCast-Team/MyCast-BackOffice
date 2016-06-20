@@ -1,4 +1,4 @@
-var models=require("../Models");
+var models=require("../models");
 var musiqueutils=function(singer,producer,title,type){
 
 	this.singer=singer;
