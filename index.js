@@ -145,7 +145,7 @@ app.post("/connection", function (req, res, next) {
 
 			u1.addtoken(u1,function(err, token){
 				if(err){
-            res.statut=500;
+            res.status(500);
 					  res.json({
 						"code": 2,
 						"message": "Sequelize error",
