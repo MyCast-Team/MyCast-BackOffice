@@ -1,7 +1,15 @@
 var Sequelize=require("sequelize");
+console.log("teeeeeeessssssssssssssssssssssssssssssssst")
 var config    = require('config');  // we use node-config to handle environments
+require('../env.js');
 
-var dbConfig = config.get('development');
+
+if(process.env.NODE_ENV=="test"){
+
+	var dbConfig =	config.get("test");
+} else{
+var dbConfig =	config.get('development');
+}
 /*module.exports= new sequelize("mycast","root","",{
 	pool:false,
 	host:"localhost"
@@ -11,5 +19,5 @@ module.exports = new Sequelize(
     dbConfig.username,
     dbConfig.password,{
       host: dbConfig.host,
-      dialect: dbConfig.driver
-}
+      dialect: dbConfig.dialect
+})
