@@ -5,9 +5,10 @@ require('../env.js');
 
 
 if(process.env.NODE_ENV=="test"){
-
+	console.log(config.get("test").get("host"));
 	var dbConfig =	config.get("test");
 } else{
+		console.log(process.env.NODE_ENV);
 var dbConfig =	config.get('development');
 }
 /*module.exports= new sequelize("mycast","root","",{
