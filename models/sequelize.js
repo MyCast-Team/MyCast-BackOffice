@@ -1,5 +1,5 @@
 var Sequelize=require("sequelize");
-console.log("teeeeeeessssssssssssssssssssssssssssssssst")
+
 var config    = require('config');  // we use node-config to handle environments
 require('../env.js');
 

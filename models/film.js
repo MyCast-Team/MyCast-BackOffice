@@ -7,7 +7,7 @@ module.exports=sequelize.import("film",function(sequelize,datatypes){
 			primaryKey:true,
 			autoIncrement:true
 		},
-		
+
                 name :{
 			type: datatypes.STRING
 		},
@@ -16,11 +16,14 @@ module.exports=sequelize.import("film",function(sequelize,datatypes){
 		},
 		date:{
 			type: datatypes.DATE
-		}
+		}/*,
+		type:{
+			type: datatypes.STRING
+		}*/
 	}, {
 		paranoid:true,
 		freezeTableName:true,
 		underscored:true
-	
+
 	});
 })

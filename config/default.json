@@ -8,10 +8,10 @@
 
   },
   "test": {
-    "username": "test",
-    "password": null,
-    "database": "mycast",
-    "host": "127.0.0.1",
+    "username": "u534016128_root",
+    "password": "mycastfouan",
+    "database": "u534016128_cast",
+    "host": "mysql.hostinger.fr",
     "dialect": "mysql"
   },
   "production": {
