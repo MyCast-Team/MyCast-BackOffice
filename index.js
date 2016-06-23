@@ -149,9 +149,9 @@ app.post("/connection", function (req, res, next) {
 				if(err){
             res.status(500);
 					  res.json({
-						"code": 2,
+						"code": 500,
 						"message": "Sequelize error",
-						"error": err
+						"error": "primaryKey"
 					})
 				}else{
 						var token = jwt.sign(results.id, app.get('superSecret'));
