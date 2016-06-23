@@ -1,7 +1,7 @@
 var sequelize=require("./sequelize");
 
 module.exports=sequelize.import("userplugin",function(sequelize,datatypes){
-	return sequelize.define("UserPlugin", {
+	return sequelize.define("userplugin", {
 		idUser:{
 			type: datatypes.BIGINT,
 			primaryKey:true,
@@ -10,7 +10,7 @@ module.exports=sequelize.import("userplugin",function(sequelize,datatypes){
 		idPlugin:{
 			type: datatypes.BIGINT,
 			primaryKey:true,
-			
+
 		},
 		date :{
 			type: datatypes.DATE
@@ -19,6 +19,6 @@ module.exports=sequelize.import("userplugin",function(sequelize,datatypes){
 		paranoid:true,
 		freezeTableName:true,
 		underscored:true
-	
+
 	});
 })

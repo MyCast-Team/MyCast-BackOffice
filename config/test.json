@@ -1,9 +1,9 @@
 {
   "test": {
-  "username": "u534016128_root",
-  "password": "mycastfouan",
-  "database": "u534016128_cast",
-  "host": "mysql.hostinger.fr",
-  "dialect": "mysql"
-}
+    "username": "mycast_root",
+    "password": "mycastfouan",
+    "database": "mycast_mycast",
+    "host": "mysql-mycast.alwaysdata.net",
+    "dialect": "mysql"
+  }
   }

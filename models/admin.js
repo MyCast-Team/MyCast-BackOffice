@@ -1,13 +1,13 @@
 var sequelize=require("./sequelize");
 
 module.exports=sequelize.import("admin",function(sequelize,datatypes){
-	return sequelize.define("Admin", {
+	return sequelize.define("admin", {
 		id:{
 			type: datatypes.BIGINT,
 			primaryKey:true,
 			autoIncrement:true
 		},
-		
+
 		login :{
 			type: datatypes.STRING
 		},
@@ -21,6 +21,6 @@ module.exports=sequelize.import("admin",function(sequelize,datatypes){
 		paranoid:true,
 		freezeTableName:true,
 		underscored:true
-	
+
 	});
 })

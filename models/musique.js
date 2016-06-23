@@ -1,13 +1,13 @@
 var sequelize=require("./sequelize");
 
 module.exports=sequelize.import("musique",function(sequelize,datatypes){
-	return sequelize.define("Musique", {
+	return sequelize.define("musique", {
 		id:{
 			type: datatypes.BIGINT,
 			primaryKey:true,
 			autoIncrement:true
 		},
-		
+
 		singer :{
 			type: datatypes.STRING
 		},
@@ -24,6 +24,6 @@ module.exports=sequelize.import("musique",function(sequelize,datatypes){
 		paranoid:true,
 		freezeTableName:true,
 		underscored:true
-	
+
 	});
 })

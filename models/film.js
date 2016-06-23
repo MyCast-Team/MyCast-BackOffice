@@ -1,7 +1,7 @@
 var sequelize=require("./sequelize");
 
 module.exports=sequelize.import("film",function(sequelize,datatypes){
-	return sequelize.define("Film", {
+	return sequelize.define("film", {
 		id:{
 			type: datatypes.BIGINT,
 			primaryKey:true,

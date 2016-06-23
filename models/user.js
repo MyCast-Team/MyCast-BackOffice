@@ -7,11 +7,11 @@ module.exports=sequelize.import("user",function(sequelize,datatypes){
 			primaryKey:true,
 			autoIncrement:true
 		}
-		
+
 	}, {
 		paranoid:true,
 		freezeTableName:true,
 		underscored:true
-	
+
 	});
 })

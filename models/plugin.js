@@ -1,13 +1,13 @@
 var sequelize=require("./sequelize");
 
 module.exports=sequelize.import("plugin",function(sequelize,datatypes){
-	return sequelize.define("Plugin", {
+	return sequelize.define("plugin", {
 		id:{
 			type: datatypes.BIGINT,
 			primaryKey:true,
 			autoIncrement:true
 		},
-		
+
 		name :{
 			type: datatypes.STRING
 		},
@@ -18,6 +18,6 @@ module.exports=sequelize.import("plugin",function(sequelize,datatypes){
 		paranoid:true,
 		freezeTableName:true,
 		underscored:true
-	
+
 	});
 })
