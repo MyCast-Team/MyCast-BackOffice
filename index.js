@@ -67,11 +67,10 @@ apiRoutes.use(function(req, res, next) {
   // check header or url parameters or post parameters for token
  // req.headers.authorization=153365;
 
-  var token =(req.session.token) || (req.body.token);
+  var token =(req.session.token) || (req.body.token)|| (req.headers.token);
+  console.log(req.headers);
+  console.log(req.body);
 
-	console.log(req.body.token);
-
-	console.log(token);
   // decode token
   if (token) {
 

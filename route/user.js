@@ -22,7 +22,7 @@ module.exports = function (app) {
 
 
     });
-  
+
 
 
 
@@ -41,6 +41,8 @@ module.exports = function (app) {
         var user = utils.user;
         var u1 = new user();
         u1.adduser(u1, function (undefined, result) {
+          res.status(200);
+          
           res.send(result)
         });
 

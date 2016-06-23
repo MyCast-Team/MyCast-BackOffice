@@ -31,9 +31,13 @@ describe('user',function(){
 	})
 	describe("GET /ListeUser",function(){
 		it("should  display a list of user", function(){
-			return request(api).get('/ListeUser').send().expect(200);
+			return request(api).get('/ListeUser').type('form').send({token :"eyJhbGciOiJIUzI1NiJ9.Ng.hAGbSbFGDZMTqtfa7xzAVtf3ThZF_6KOJYjRVcFPaYI"}).expect(200);
 		})
-
+	})
+		describe("POST /addUser",function(){
+			it("should add user" , function(){
+				return request(api).get('/ListeUser').type('form').send({token :"eyJhbGciOiJIUzI1NiJ9.Ng.hAGbSbFGDZMTqtfa7xzAVtf3ThZF_6KOJYjRVcFPaYI"}).expect(200);
+			})
 	})
 	/*describe("GET /Deco",function(){
 		it("should delete token", function(done){
