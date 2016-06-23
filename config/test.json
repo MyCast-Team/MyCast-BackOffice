@@ -1,7 +1,9 @@
-"test": {
+{
+  "test": {
   "username": "u534016128_root",
   "password": "mycastfouan",
   "database": "u534016128_cast",
   "host": "mysql.hostinger.fr",
   "dialect": "mysql"
 }
+  }
