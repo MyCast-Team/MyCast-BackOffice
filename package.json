@@ -38,6 +38,5 @@
   },
   "devDependencies": {
     "mocha": "^2.5.3"
-  },
-  "start":"node index.js"
+  }
 }
