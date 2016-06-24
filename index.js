@@ -1,6 +1,6 @@
 var express = require("express");
 var app = express();
-
+var DEFAULT_PORT = 3000;
 var math = require('mathjs');
 module.exports = app;
 var session = require('express-session');
@@ -474,7 +474,9 @@ require('./route')(app);
 preExit.push (function (code) {
 		console.log("à faire")
 });
-app.listen(3000, function () {
-
+var port=process.env.PORT || DEFAULT_PORT;
+app.listen(port, function () {
+  console.log("server started on port "+port);
+  
     console.log("Server start : ok");
 })
