@@ -1,7 +1,7 @@
 var sequelize=require("./sequelize");
 
 module.exports=sequelize.import("user",function(sequelize,datatypes){
-	return sequelize.define("User", {
+	return sequelize.define("user", {
 		id:{
 			type: datatypes.BIGINT,
 			primaryKey:true,

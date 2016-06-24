@@ -1,7 +1,7 @@
 var sequelize=require("./sequelize");
 
 module.exports=sequelize.import("userfilm",function(sequelize,datatypes){
-	return sequelize.define("UserFilm", {
+	return sequelize.define("userfilm", {
 		idUser:{
 			type: datatypes.BIGINT,
 			primaryKey:true,
@@ -10,7 +10,7 @@ module.exports=sequelize.import("userfilm",function(sequelize,datatypes){
 		idFilm:{
 			type: datatypes.BIGINT,
 			primaryKey:true,
-			
+
 		},
 		date :{
 			type: datatypes.DATE
@@ -19,6 +19,6 @@ module.exports=sequelize.import("userfilm",function(sequelize,datatypes){
 		paranoid:true,
 		freezeTableName:true,
 		underscored:true
-	
+
 	});
 })

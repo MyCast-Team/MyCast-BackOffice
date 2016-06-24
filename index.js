@@ -68,8 +68,7 @@ apiRoutes.use(function(req, res, next) {
  // req.headers.authorization=153365;
 
   var token =(req.session.token) || (req.body.token)|| (req.headers.token);
-  console.log(req.headers);
-  console.log(req.body);
+
 
   // decode token
   if (token) {
@@ -477,6 +476,6 @@ preExit.push (function (code) {
 var port=process.env.PORT || DEFAULT_PORT;
 app.listen(port, function () {
   console.log("server started on port "+port);
-  
+
     console.log("Server start : ok");
 })
