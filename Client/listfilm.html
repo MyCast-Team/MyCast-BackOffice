@@ -35,7 +35,9 @@
           <input type="text"  id="titlefield" name="title">
           <input type="text" id="directorfield" name="director">
           <input type="text" id="datefield" name="date">
-            <input type="button" id="updatebutton" value="valider">
+          <input type="text" id="typefield" name="type">
+          <input type="text" id="lengthfield" name="length">
+          <input type="button" id="updatebutton" value="valider">
       </form>
     </div>
     </body>
@@ -97,7 +99,8 @@ $.ajax({
                   $("#titlefield").val(response.name);
                   $("#directorfield").val(response.director);
                   $("#datefield").val(response.date);
-
+                  $("#typefield").val(response.type);
+                  $("lengthfield").val(response.length);
             });
 
 

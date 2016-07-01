@@ -189,6 +189,13 @@ app.get("/:id/ListeFilm", function (req, res, next) {
     var userresult="";
     var movieresult="";
     var userfilm = models.userfilm;
+    if(isNaN(req.params.id)){
+      res.status(500);
+    res.json({
+        "code": 2,
+        "error": "Id is not a number"
+    })
+    }else{
     fs.truncate('filmuser.json', 0, function(){console.log('done')})
 
 
@@ -197,22 +204,22 @@ app.get("/:id/ListeFilm", function (req, res, next) {
             nbuser = results.length;
             userresult=results;
         }).catch(function (err) {
-
+              res.status(500);
             res.json({
                 "code": 2,
                 "message": "Sequelize error in user",
-                "error": err
+                "error": "Cant't find user"
             })
         })
         film.findAll().then(function (results) {
             nbmovie = results.length;
             movieresult=results;
         }).catch(function (err) {
-
+              res.status(500);
             res.json({
                 "code": 2,
                 "message": "Sequelize error in film",
-                "error": err
+                "error": "can't find film"
             })
         })
         userfilm.findAll().then(function (results) {
@@ -234,7 +241,7 @@ app.get("/:id/ListeFilm", function (req, res, next) {
             var matrice3 = math.multiply(matriceprime, matrice);
             var matrice4 = math.multiply(matrice3, matriceprime);
             var matrice5 = math.transpose(matrice4);
-            console.log(matrice5);
+
             for (var i = 0, len = results.length; i < len; i++) {
                 var row = results[i];
                 if (matrice.subset(math.index(row.idUser - 1, row.idFilm - 1)) == 1) {
@@ -246,10 +253,9 @@ app.get("/:id/ListeFilm", function (req, res, next) {
        var cp=0;
          for (var t = 0; t < userresult.length; t++) {
                 var rowuser = userresult[t];
-                console.log(t)
 
                 for (var i = 0, len = movieresult.length; i < len; i++) {
-                    console.log(i)
+
                     var row = movieresult[i];
 
 
@@ -258,6 +264,8 @@ app.get("/:id/ListeFilm", function (req, res, next) {
                               "user": rowuser.id,
                               "film": row.name,
                               "director":row.director,
+                              "type":row.type,
+                              "length":row.length,
                               "date":row.date
                             }
 
@@ -279,22 +287,24 @@ app.get("/:id/ListeFilm", function (req, res, next) {
 
             }
 
-            console.log(matrice5);
             fs.appendFile("filmuser.json",  "]", function (err) {
                   if (err) {
                       throw err;
                   }
+                    res.status(200);
+
                     res.sendFile(__dirname+"/filmuser.json");
               })
 
         }).catch(function (err) {
-
+            res.status(500);
             res.json({
                 "code": 2,
                 "message": "Sequelize error in userfilm",
-                "error": err
+                "error": "Error in the matrice."
             })
         })
+      }
 });
 
 
@@ -307,31 +317,38 @@ app.get("/:id/ListeFilm", function (req, res, next) {
     var nbmusique = 0;
     var userresult="";
     var musiqueresult="";
+    if(isNaN(req.params.id)){
+      res.status(500);
+    res.json({
+        "code": 2,
+        "error": "Id is not a number"
+    })
+    }else{
     fs.truncate('musiqueuser.json', 0, function(){console.log('done')})
         user.findAll().then(function (results) {
             nbuser = results.length;
             userresult=results;
         }).catch(function (err) {
-
+            res.status(500);
             res.json({
                 "code": 2,
                 "message": "Sequelize error in user",
-                "error": err
+                "error": "Can't find user"
             })
         })
         musique.findAll().then(function (results) {
             nbmusique = results.length;
             musiqueresult=results;
         }).catch(function (err) {
-
+            res.status(500);
             res.json({
                 "code": 2,
                 "message": "Sequelize error in musique",
-                "error": err
+                "error": "can't find music"
             })
         })
         usermusique.findAll().then(function (results) {
-            console.log("test")
+
             var matrice = math.matrix();
 
             matrice.resize([nbuser, nbmusique]);
@@ -342,7 +359,7 @@ app.get("/:id/ListeFilm", function (req, res, next) {
             for (var i = 0, len = results.length; i < len; i++) {
                 var row = results[i];
 
-                console.log(row.idmusique);
+
                 matrice.subset(math.index(row.iduser - 1, row.idmusique - 1), 1);
                 matriceprime.subset(math.index(row.idmusique - 1, row.iduser - 1), 1);
 
@@ -350,7 +367,7 @@ app.get("/:id/ListeFilm", function (req, res, next) {
             var matrice3 = math.multiply(matriceprime, matrice);
             var matrice4 = math.multiply(matrice3, matriceprime);
             var matrice5 = math.transpose(matrice4);
-            console.log(matrice5);
+
 
             for (var i = 0, len = results.length; i < len; i++) {
                 var row = results[i];
@@ -377,7 +394,9 @@ app.get("/:id/ListeFilm", function (req, res, next) {
                               "singer":row.singer,
                               "title": row.title,
                               "producer":row.producer,
-                              "type":row.type
+                              "type":row.type,
+                              "length": row.length,
+                              "date":row.date
                             }
 
                       if(cp!=0){
@@ -396,23 +415,24 @@ app.get("/:id/ListeFilm", function (req, res, next) {
             }
 
 
-            console.log(matrice5);
-             console.log("test2")
+
             fs.appendFile("musiqueuser.json",  "]", function (err) {
                   if (err) {
                       throw err;
                   }
+                  res.status(200);
+
                     res.sendFile(__dirname+"/musiqueuser.json");
               })
         }).catch(function (err) {
-
+            res.status(500);
             res.json({
                 "code": 2,
                 "message": "Sequelize error in usermusique",
                 "error": err
             })
         })
-
+      }
 });
 
 

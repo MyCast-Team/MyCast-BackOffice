@@ -19,7 +19,13 @@ module.exports=sequelize.import("musique",function(sequelize,datatypes){
 		},
 		type:{
 			type: datatypes.STRING
-		}
+		},
+		length:{
+			type: datatypes.STRING
+		},
+		date:{
+			type: datatypes.STRING
+		},
 	}, {
 		paranoid:true,
 		freezeTableName:true,

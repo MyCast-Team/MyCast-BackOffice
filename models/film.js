@@ -8,7 +8,7 @@ module.exports=sequelize.import("film",function(sequelize,datatypes){
 			autoIncrement:true
 		},
 
-                name :{
+    name :{
 			type: datatypes.STRING
 		},
 		director:{
@@ -16,10 +16,13 @@ module.exports=sequelize.import("film",function(sequelize,datatypes){
 		},
 		date:{
 			type: datatypes.DATE
-		}/*,
+		},
 		type:{
 			type: datatypes.STRING
-		}*/
+		},
+		length:{
+			type: datatypes.STRING
+		}
 	}, {
 		paranoid:true,
 		freezeTableName:true,

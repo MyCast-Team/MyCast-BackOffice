@@ -34,14 +34,38 @@ describe('user',function(){
 			return request(api).get('/ListeUser').type('form').send({token :"eyJhbGciOiJIUzI1NiJ9.Ng.hAGbSbFGDZMTqtfa7xzAVtf3ThZF_6KOJYjRVcFPaYI"}).expect(200);
 		})
 	})
-		describe("POST /addUser",function(){
+		describe("POST /adduser",function(){
 			it("should add user" , function(){
-				return request(api).get('/ListeUser').type('form').send({token :"eyJhbGciOiJIUzI1NiJ9.Ng.hAGbSbFGDZMTqtfa7xzAVtf3ThZF_6KOJYjRVcFPaYI"}).expect(200);
+				return request(api).post('/adduser').type('form').send({token :"eyJhbGciOiJIUzI1NiJ9.Ng.hAGbSbFGDZMTqtfa7xzAVtf3ThZF_6KOJYjRVcFPaYI"}).expect(200).expect({"user":"created"});
 			})
 	})
 	describe("GET /Deco",function(){
 		it("should delete token", function(){
 			return request(api).get('/Deco').type('form').send({token :"eyJhbGciOiJIUzI1NiJ9.Ng.hAGbSbFGDZMTqtfa7xzAVtf3ThZF_6KOJYjRVcFPaYI"}).expect(200);
+		})
+	})
+	describe("GET /:id/ListeFilm",function(){
+		it("should get an error", function(){
+			return request(api).get('/a/ListeFilm').expect(500).expect({
+				"code":"2",
+				"error":"Id is not a number",
+
+			});
+		})
+		it("should get an Answer", function(){
+			return request(api).get('/1/ListeFilm').expect(200);
+		})
+	})
+	describe("GET /:id/ListeMusique",function(){
+		it("should get an error", function(){
+			return request(api).get('/a/ListeMusique').expect(500).expect({
+				"code":"2",
+				"error":"Id is not a number",
+
+			});
+		})
+		it("should get an Answer", function(){
+			return request(api).get('/1/ListeMusique').expect(200);
 		})
 	})
 });

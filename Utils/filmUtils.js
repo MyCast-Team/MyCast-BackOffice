@@ -1,10 +1,11 @@
 var models=require("../models");
 
-var filmutils=function(name,director,date){
+var filmutils=function(name,director,date,type){
 
 	this.name=name;
 	this.director=director;
 	this.date=date;
+	this.type=type;
 
 
 }
@@ -15,7 +16,8 @@ filmutils.prototype.addfilm=function(u1,callback){
 		film.create({
 			"name":u1.name,
 			"director" : u1.director,
-			"date": u1.date
+			"date": u1.date,
+			"type": u1.type
 
 
 		}).then(function(result){

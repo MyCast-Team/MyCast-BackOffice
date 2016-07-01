@@ -38,7 +38,8 @@
           <input type="text" id="singerfield" name="singer">
           <input type="text"  id="producerfield" name="producer">
           <input type="text"  id="typefield" name="type">
-        <!--  <input type="text" id="datefield" name="date">-->
+          <input type="text" id="datefield" name="date">
+            <input type="text" id="lenfield" name="len">
           <input type="button" id="updatebutton" value="valider">
       </form>
     </div>
@@ -103,8 +104,8 @@ $.ajax({
                   $("#producerfield").val(response.producer);
                   $("#titlefield").val(response.title);
                   $("#typefield").val(response.type);
-                //  $("#datefield").val(response.date);
-
+                  $("#datefield").val(response.date);
+                  $("#lenfield").val(response.length);
             });
 
 
