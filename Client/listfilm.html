@@ -91,7 +91,7 @@ $.ajax({
                 method: 'GET',
                 url: '/updatefilm/' + $(this).attr('value')
             }).done(function (response) {
-
+                alert(response.length);
                 $("#update").removeClass("hidden")
                 // Check for a successful (blank) response
 
@@ -100,7 +100,7 @@ $.ajax({
                   $("#directorfield").val(response.director);
                   $("#datefield").val(response.date);
                   $("#typefield").val(response.type);
-                  $("lengthfield").val(response.length);
+                  $("#lengthfield").val(response.length);
             });
 
 

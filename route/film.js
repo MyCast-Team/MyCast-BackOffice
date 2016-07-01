@@ -83,6 +83,9 @@ module.exports = function (app) {
         if (req.body.date) {
             attributes.date = req.body.date;
         }
+        if (req.body.length) {
+            attributes.date = req.body.length;
+        }
 
 
         var u1 = new film();
