@@ -6,10 +6,11 @@ var fs = require("fs");
 module.exports = function (app) {
 
     app.get("/Deco", function (req, res, next) {
+      console.log("test")
 			var tokenmodel=models.token;
 			var tokenutils=utils.token;
 
-			var token=(req.session.token) || (req.body.token);
+			var token=(req.session.token) || (req.body.token)|| (req.headers.token);
 			console.log(token);
 			 jwt.verify(token, app.get('superSecret'), function(err, decoded) {
 				if (err) {

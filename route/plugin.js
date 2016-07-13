@@ -1,52 +1,11 @@
 var models = require("../models");
 var utils = require("../Utils");
-var multer = require("multer");
-var storage = multer.diskStorage({
-    destination: function (req, file, callback) {
-        callback(null, './uploads');
-    },
-    filename: function (req, file, callback) {
-        callback(null, file.fieldname + '-' + file.originalname);
-    }
-});
+
 
 
 var fs = require("fs");
 module.exports = function (app) {
-    app.post("/plugin", multer({storage: storage}).single('plugin'), function (req, res, next) {
 
-        var plugin = utils.plugin;
-        console.log("teeeeeeeeeeeeeeeeeeeesttttt")
-        if (req.body.author) {
-
-			if(req.file){
-            console.log("teeeeeeeeeeeeeeeeeeeesttttt222222222222")
-        console.log(req.file.originalname)
-            var u1 = new plugin(req.file.originalname, req.body.author);
-			}else{
-            console.log("teeeeeeeeeeeeeeeeeeeesttttt222222222223333333333")
-            console.log(req.body)
-          console.log(req.file)
-			var u1 = new plugin(req.body.originalname, req.body.author);
-			}
-
-
-            u1.addplugin(u1, function (err, data) {
-			           if(err){
-                   res.json({
-                       "code": 2,
-                       "message": "Sequelize error",
-                       "error": err
-                   })
-                 }else{
-                     res.send(data);
-                 }
-
-            });
-
-        }
-
-    });
 
     app.get("/Listeplugin", function (req, res, next) {
 

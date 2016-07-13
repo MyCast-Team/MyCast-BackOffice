@@ -1,28 +1,24 @@
 var models=require("../models");
 var tokenUtils=function(id){
-	
 	this.id=id;
-
-	
-	
 }
 
 tokenUtils.prototype.addtoken=function(u1,callback){
 		var token=models.token;
 		if(u1){
-		token.create({	
+		token.create({
 			"idUser" : u1.id
 		}).then(function(result){
-			console.log("token créer")
+			console.log("token crï¿½er")
 			callback(undefined,result)
 		}).catch(function(err){
-			console.log("token pas créer")
+			console.log("token pas crï¿½er")
 			callback(err,undefined);
-				
-			
+
+
 		});
-		
-	
+
+
 	}
 }
 tokenUtils.prototype.delete = function(idtoken, callback) {

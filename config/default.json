@@ -1,0 +1,17 @@
+{
+  "development": {
+    "username": "root",
+    "password": null,
+    "database": "mycast",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+
+  },
+  "test": {
+    "username": "mycast_root",
+    "password": "mycastfouan",
+    "database": "mycast_mycast",
+    "host": "mysql-mycast.alwaysdata.net",
+    "dialect": "mysql"
+  }
+}

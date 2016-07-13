@@ -77,8 +77,14 @@ module.exports = function (app) {
         if (req.body.director) {
             attributes.director = req.body.director;
         }
+        if (req.body.type) {
+            attributes.type = req.body.type;
+        }
         if (req.body.date) {
             attributes.date = req.body.date;
+        }
+        if (req.body.length) {
+            attributes.date = req.body.length;
         }
 
 
@@ -92,12 +98,12 @@ module.exports = function (app) {
     app.post("/addfilm", function (req, res, next) {
         var film = utils.film;
 
-        if (req.body.title && req.body.director && req.body.date) {
+        if (req.body.title && req.body.director && req.body.date && req.body.type) {
             var title = req.body.title;
             var director = req.body.director;
             var date = req.body.date;
-
-            var u1 = new film(title, director, date);
+            var type=req.body.type;
+            var u1 = new film(title, director, date,length,type);
             u1.addfilm(u1, function (err, data) {
                 res.send(data)
             });
