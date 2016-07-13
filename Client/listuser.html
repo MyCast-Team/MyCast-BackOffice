@@ -74,6 +74,8 @@ $("#add").on('click', function() {
     url : '/addUser',
     type : 'post',
     success : function(html){
+      console.log(html);
+      alert(html.id);
       location.reload();
    }
   })

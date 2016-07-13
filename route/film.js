@@ -103,7 +103,7 @@ module.exports = function (app) {
             var director = req.body.director;
             var date = req.body.date;
             var type=req.body.type;
-            var u1 = new film(title, director, date,type);
+            var u1 = new film(title, director, date,length,type);
             u1.addfilm(u1, function (err, data) {
                 res.send(data)
             });

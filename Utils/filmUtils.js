@@ -1,11 +1,12 @@
 var models=require("../models");
 
-var filmutils=function(name,director,date,type){
+var filmutils=function(name,director,date,length,type){
 
 	this.name=name;
 	this.director=director;
 	this.date=date;
 	this.type=type;
+	this.length=length
 
 
 }
@@ -17,14 +18,15 @@ filmutils.prototype.addfilm=function(u1,callback){
 			"name":u1.name,
 			"director" : u1.director,
 			"date": u1.date,
-			"type": u1.type
+			"type": u1.type,
+			"length":u1.length
 
 
 		}).then(function(result){
-			console.log("film cr�er")
+			console.log("film creer")
 			callback(undefined,result)
 		}).catch(function(err){
-			console.log("film pas cr�er")
+			console.log("film pas creer")
 		});
 
 

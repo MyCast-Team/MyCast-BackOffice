@@ -5,7 +5,7 @@ module.exports=sequelize.import("userfilm",function(sequelize,datatypes){
 		idUser:{
 			type: datatypes.BIGINT,
 			primaryKey:true,
-			autoIncrement:true
+			
 		},
 		idFilm:{
 			type: datatypes.BIGINT,

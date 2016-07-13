@@ -1,10 +1,6 @@
 var models=require("../models");
 var tokenUtils=function(id){
-
 	this.id=id;
-
-
-
 }
 
 tokenUtils.prototype.addtoken=function(u1,callback){

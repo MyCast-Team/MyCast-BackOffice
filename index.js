@@ -14,6 +14,23 @@ var utils = require("./Utils");
 var busboy = require('connect-busboy');
 //var cookie=require('cookie-parser');
 var apiRoutes = express.Router();
+var multer = require("multer");
+var storage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, './route/uploads');
+    },
+    filename: function (req, file, callback) {
+        callback(null, file.fieldname + '-' + file.originalname);
+    }
+});
+var storage2 = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, './route/mediacase');
+    },
+    filename: function (req, file, callback) {
+        callback(null, file.fieldname + '-' + file.originalname);
+    }
+});
 var secret = '42';
 
 app.set('superSecret',secret);
@@ -23,7 +40,7 @@ function encrypt(text) {
     crypted += cipher.final('hex');
     return crypted;
 }
-var unless = function(path, middleware) {
+/*var unless = function(path, middleware) {
     return function(req, res, next) {
         if (path === req.path) {
             return next();
@@ -31,7 +48,109 @@ var unless = function(path, middleware) {
             return middleware(req, res, next);
         }
     };
-};
+};*/
+function letterPair(str){
+  var numPair=str.length-1;
+  var pairs=[];
+  var i=0;
+  for(i=0;i<numPair;i++){
+    pairs[i]=str.substring(i,i+2);
+  }
+  return pairs;
+}
+function wordLetterPair(str){
+ var allPair=[];
+ var word=str.split("\\s");
+
+ var i;
+ for(i=0;i<word.length;i++){
+   var pairsinWord=letterPair(word[i]);
+   for(var y=0;y<pairsinWord.length;y++){
+     allPair.push(pairsinWord[y]);
+
+   }
+ }
+
+ return allPair;
+}
+function compareString(str1,str2){
+  var pairs1=wordLetterPair(str1.toUpperCase());
+  var pairs2=wordLetterPair(str2.toUpperCase());
+  var intersection=0;
+  var union=pairs1.length+pairs2.length;
+
+  for(var i=0;i<pairs1.length;i++){
+    var pair1=pairs1[i];
+    for(var j =0;j<pairs2.length;j++){
+      var pair2=pairs2[j];
+
+      if(pair1==pair2){
+        intersection++;
+        pairs2.splice(j,1);
+
+        break;
+      }
+    }
+  }
+  return (2.0*intersection)/union;
+}
+
+function generatematrice(nbuser,nb,results){
+  var matrice = math.matrix();
+
+  matrice.resize([nbuser, nb]);
+
+  var matriceprime = math.matrix();
+  matriceprime.resize([nb, nbuser]);
+
+  for (var i = 0, len = results.length; i < len; i++) {
+      var row = results[i];
+
+
+      matrice.subset(math.index(row.idUser - 1, row.idFilm - 1), 1);
+      matriceprime.subset(math.index(row.idFilm - 1, row.idUser - 1), 1);
+  }
+  var matrice3 = math.multiply(matriceprime, matrice);
+  var matrice4 = math.multiply(matrice3, matriceprime);
+  var matrice5 = math.transpose(matrice4);
+
+  for (var i = 0, len = results.length; i < len; i++) {
+      var row = results[i];
+      if (matrice.subset(math.index(row.idUser - 1, row.idFilm - 1)) == 1) {
+          matrice5.subset(math.index(row.idUser - 1, row.idFilm - 1), 0);
+      }
+  }
+  return matrice5;
+}
+function generatematricemusic(nbuser,nbmusique,results){
+  var matrice = math.matrix();
+
+  matrice.resize([nbuser, nbmusique]);
+
+  var matriceprime = math.matrix();
+  matriceprime.resize([nbmusique, nbuser]);
+
+  for (var i = 0, len = results.length; i < len; i++) {
+      var row = results[i];
+
+
+      matrice.subset(math.index(row.iduser - 1, row.idmusique - 1), 1);
+      matriceprime.subset(math.index(row.idmusique - 1, row.iduser - 1), 1);
+
+  }
+  var matrice3 = math.multiply(matriceprime, matrice);
+  var matrice4 = math.multiply(matrice3, matriceprime);
+  var matrice5 = math.transpose(matrice4);
+
+
+  for (var i = 0, len = results.length; i < len; i++) {
+      var row = results[i];
+      if (matrice.subset(math.index(row.iduser - 1, row.idmusique - 1)) == 1) {
+          matrice5.subset(math.index(row.iduser - 1, row.idmusique - 1), 0);
+      }
+  }
+  return matrice5;
+}
 app.use(session({
     secret: '2C44-4D44-WppQ38S',
     resave: true,
@@ -95,35 +214,159 @@ apiRoutes.use(function(req, res, next) {
 
   }
 });
-var preExit = [];
 
-// Catch exit
-process.stdin.resume ();
-process.on ('exit', function (code) {
-  var i;
 
-  console.log ('Process exit');
+app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function (req, res, next) {
+  var contents = fs.readFileSync("./route/mediacase/mediacase-mediacase.json");
+  var film=utils.film;
+  var music=utils.musique;
+  var filmmod=models.film;
+  var musicmod=models.musique;
+  var userfilm=utils.userfilm;
+  var filmresult="";
+  var musiqueresult="";
+  var nbfilm=0;
+  var nbmusique=0;
+  var iduser=0;
+  var idfilm=0;
+  var date=new Date().toISOString();
+  filmmod.findAll().then(function(results){
+       nbfilm=results.length;
 
-  for (i = 0; i < preExit.length; i++) {
-    preExit [i] (code);
+       filmresult=results;
+       musicmod.findAll().then(function(result){
+              musiqueresult=result;
+              var jsonObject=JSON.parse(contents);
+              var find=0;
+              jsonObject.forEach(function(jsonObject, i){
+
+                 find=0;
+                if(jsonObject.type=='audio'){
+                  for(var y=0;y<musiqueresult.length;y++){
+                    var row=musiqueresult[y];
+                    var taux=compareString(jsonObject.titre,row.name);
+                    if(taux>=0.8){
+                       find=1;
+                      break;
+                    }
+                  }
+                  if(find==0){
+                    var u1=new music(jsonObject.titre,jsonObject.author,jsonObject.date,jsonObject.duration,jsonObject.genre)
+                    u1.addfilm(u1,function (err, data) {
+                        res.send(data)
+                    });
+                  }
+                }else{
+
+                    for(var y=0;y<nbfilm;y++){
+                      var row=filmresult[y];
+                      var taux=compareString(jsonObject.titre,row.name);
+
+                      if(taux>=0.8){
+
+                        jsonObject.titre=row.name;
+
+                         find=1;
+                        break;
+                      }
+                    }
+                    if(find==0){
+                      var u1=new film(jsonObject.titre,jsonObject.author,jsonObject.date,jsonObject.duration,jsonObject.genre)
+                      u1.addfilm(u1,function (err, data) {
+                          res.send(data)
+                      });
+                    }
+                    var request = {
+                        "where": {
+                            name: jsonObject.titre,
+                            director:jsonObject.author,
+                            type:jsonObject.genre
+
+                        }
+                    }
+                   iduser=jsonObject.iduser;
+
+                    filmmod.findOne(request).then(function(result){
+
+                      if(result){
+
+                      idfilm=result.id;
+
+                      var u1=new userfilm(iduser,idfilm,date);
+                    
+                      u1.adduserfilm(u1,function(err,date){if(err){console.log(err);}});
+                      }else{
+                        console.log("pas de resultat")
+                      }
+
+                    })
+
+
+                }
+              });
+           }).catch(function (err) {
+                console.log(err)
+             })
+    }).catch(function (err) {
+        console.log(err)
+      })
+
+
+
+
+
+    res.send();
+});
+app.post("/plugin", multer({storage: storage}).single('plugin'), function (req, res, next) {
+    var plugin = utils.plugin;
+
+  if (req.body.author) {
+        console.log("ya body author");
+  if(req.file){
+
+    console.log(req.file.originalname)
+  var u1 = new plugin(req.file.originalname, req.body.author);
+  }else{
+  var u1 = new plugin(req.body.originalname, req.body.author);
   }
 
-  process.exit (code);
+
+        u1.addplugin(u1, function (err, data) {
+             if(err){
+
+               res.json({
+                   "code": 2,
+                   "message": "Sequelize error",
+                   "error": err
+               })
+             }else{
+
+                 res.send(data);
+             }
+
+        });
+
+    }else{
+        console.log("ya pas body author");
+    }
+
 });
+app.post("/addUser", function (req, res, next) {
 
-// Catch CTRL+C
-process.on ('SIGINT', function () {
+    var user = utils.user;
+    var u1 = new user();
+    u1.adduser(u1, function (undefined, result) {
+      res.status(200);
+      res.json({
+        "user":"created",
+        "id":result.dataValues.id
+      });
 
-  process.exit (0);
+      res.send(result)
+    });
+
+
 });
-
-// Catch uncaught exception
-process.on ('uncaughtException', function (err) {
-  console.dir (err, { depth: null });
-  process.exit (1);
-});
-
-
 app.post("/connection", function (req, res, next) {
     var admin = models.admin;
 	var Token = utils.token;
@@ -211,6 +454,7 @@ app.get("/:id/ListeFilm", function (req, res, next) {
                 "error": "Cant't find user"
             })
         })
+
         film.findAll().then(function (results) {
             nbmovie = results.length;
             movieresult=results;
@@ -224,30 +468,9 @@ app.get("/:id/ListeFilm", function (req, res, next) {
         })
         userfilm.findAll().then(function (results) {
 
-            var matrice = math.matrix();
-
-            matrice.resize([nbuser, nbmovie]);
-
-            var matriceprime = math.matrix();
-            matriceprime.resize([nbmovie, nbuser]);
-
-            for (var i = 0, len = results.length; i < len; i++) {
-                var row = results[i];
 
 
-                matrice.subset(math.index(row.idUser - 1, row.idFilm - 1), 1);
-                matriceprime.subset(math.index(row.idFilm - 1, row.idUser - 1), 1);
-            }
-            var matrice3 = math.multiply(matriceprime, matrice);
-            var matrice4 = math.multiply(matrice3, matriceprime);
-            var matrice5 = math.transpose(matrice4);
-
-            for (var i = 0, len = results.length; i < len; i++) {
-                var row = results[i];
-                if (matrice.subset(math.index(row.idUser - 1, row.idFilm - 1)) == 1) {
-                    matrice5.subset(math.index(row.idUser - 1, row.idFilm - 1), 0);
-                }
-            }
+            var matrice5=generatematrice(nbuser,nbmovie,results);
 
        var reqstat;
        var cp=0;
@@ -349,32 +572,7 @@ app.get("/:id/ListeFilm", function (req, res, next) {
         })
         usermusique.findAll().then(function (results) {
 
-            var matrice = math.matrix();
-
-            matrice.resize([nbuser, nbmusique]);
-
-            var matriceprime = math.matrix();
-            matriceprime.resize([nbmusique, nbuser]);
-
-            for (var i = 0, len = results.length; i < len; i++) {
-                var row = results[i];
-
-
-                matrice.subset(math.index(row.iduser - 1, row.idmusique - 1), 1);
-                matriceprime.subset(math.index(row.idmusique - 1, row.iduser - 1), 1);
-
-            }
-            var matrice3 = math.multiply(matriceprime, matrice);
-            var matrice4 = math.multiply(matrice3, matriceprime);
-            var matrice5 = math.transpose(matrice4);
-
-
-            for (var i = 0, len = results.length; i < len; i++) {
-                var row = results[i];
-                if (matrice.subset(math.index(row.iduser - 1, row.idmusique - 1)) == 1) {
-                    matrice5.subset(math.index(row.iduser - 1, row.idmusique - 1), 0);
-                }
-            }
+          var matrice5=generatematricemusic(nbuser,nbmusique,results);
       var reqstat;
       var cp=0;
 
@@ -466,7 +664,7 @@ app.get("/Listepluginjava", function (req, res, next) {
             }
             plugin.findOne(request).then(function (results) {
 				console.log(results.name);
-				  var filePath = "/uploads/plugin-"+results.name;
+				  var filePath = "/route/uploads/plugin-"+results.name;
 				  console.log(filePath)
 					res.sendFile(__dirname+filePath)
 
@@ -487,12 +685,6 @@ app.get("/Listepluginjava", function (req, res, next) {
     });
 app.use(apiRoutes);
 require('./route')(app);
-
-
-// Add pre-exit script
-preExit.push (function (code) {
-		console.log("à faire")
-});
 var port=process.env.PORT || DEFAULT_PORT;
 app.listen(port, function () {
   console.log("server started on port "+port);
