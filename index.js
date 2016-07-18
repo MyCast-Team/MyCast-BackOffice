@@ -8,6 +8,7 @@ var jwt = require('jsonwebtoken');
 //var jwtCheck = require('express-jwt');
 var bodyparser = require("body-parser");
 var crypto = require("crypto");
+var functiondict=require("./function");
 var fs = require("fs");
 var models = require("./models");
 var utils = require("./Utils");
@@ -49,108 +50,8 @@ function encrypt(text) {
         }
     };
 };*/
-function letterPair(str){
-  var numPair=str.length-1;
-  var pairs=[];
-  var i=0;
-  for(i=0;i<numPair;i++){
-    pairs[i]=str.substring(i,i+2);
-  }
-  return pairs;
-}
-function wordLetterPair(str){
- var allPair=[];
- var word=str.split("\\s");
-
- var i;
- for(i=0;i<word.length;i++){
-   var pairsinWord=letterPair(word[i]);
-   for(var y=0;y<pairsinWord.length;y++){
-     allPair.push(pairsinWord[y]);
-
-   }
- }
-
- return allPair;
-}
-function compareString(str1,str2){
-  var pairs1=wordLetterPair(str1.toUpperCase());
-  var pairs2=wordLetterPair(str2.toUpperCase());
-  var intersection=0;
-  var union=pairs1.length+pairs2.length;
-
-  for(var i=0;i<pairs1.length;i++){
-    var pair1=pairs1[i];
-    for(var j =0;j<pairs2.length;j++){
-      var pair2=pairs2[j];
-
-      if(pair1==pair2){
-        intersection++;
-        pairs2.splice(j,1);
-
-        break;
-      }
-    }
-  }
-  return (2.0*intersection)/union;
-}
-
-function generatematrice(nbuser,nb,results){
-  var matrice = math.matrix();
-
-  matrice.resize([nbuser, nb]);
-
-  var matriceprime = math.matrix();
-  matriceprime.resize([nb, nbuser]);
-
-  for (var i = 0, len = results.length; i < len; i++) {
-      var row = results[i];
 
 
-      matrice.subset(math.index(row.idUser - 1, row.idFilm - 1), 1);
-      matriceprime.subset(math.index(row.idFilm - 1, row.idUser - 1), 1);
-  }
-  var matrice3 = math.multiply(matriceprime, matrice);
-  var matrice4 = math.multiply(matrice3, matriceprime);
-  var matrice5 = math.transpose(matrice4);
-
-  for (var i = 0, len = results.length; i < len; i++) {
-      var row = results[i];
-      if (matrice.subset(math.index(row.idUser - 1, row.idFilm - 1)) == 1) {
-          matrice5.subset(math.index(row.idUser - 1, row.idFilm - 1), 0);
-      }
-  }
-  return matrice5;
-}
-function generatematricemusic(nbuser,nbmusique,results){
-  var matrice = math.matrix();
-
-  matrice.resize([nbuser, nbmusique]);
-
-  var matriceprime = math.matrix();
-  matriceprime.resize([nbmusique, nbuser]);
-
-  for (var i = 0, len = results.length; i < len; i++) {
-      var row = results[i];
-
-
-      matrice.subset(math.index(row.iduser - 1, row.idmusique - 1), 1);
-      matriceprime.subset(math.index(row.idmusique - 1, row.iduser - 1), 1);
-
-  }
-  var matrice3 = math.multiply(matriceprime, matrice);
-  var matrice4 = math.multiply(matrice3, matriceprime);
-  var matrice5 = math.transpose(matrice4);
-
-
-  for (var i = 0, len = results.length; i < len; i++) {
-      var row = results[i];
-      if (matrice.subset(math.index(row.iduser - 1, row.idmusique - 1)) == 1) {
-          matrice5.subset(math.index(row.iduser - 1, row.idmusique - 1), 0);
-      }
-  }
-  return matrice5;
-}
 app.use(session({
     secret: '2C44-4D44-WppQ38S',
     resave: true,
@@ -223,12 +124,15 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
   var filmmod=models.film;
   var musicmod=models.musique;
   var userfilm=utils.userfilm;
+  var Stringsummary=functiondict.string;
+  var stringsum=new Stringsummary();
   var filmresult="";
   var musiqueresult="";
   var nbfilm=0;
   var nbmusique=0;
   var iduser=0;
   var idfilm=0;
+
   var date=new Date().toISOString();
   filmmod.findAll().then(function(results){
        nbfilm=results.length;
@@ -244,7 +148,7 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
                 if(jsonObject.type=='audio'){
                   for(var y=0;y<musiqueresult.length;y++){
                     var row=musiqueresult[y];
-                    var taux=compareString(jsonObject.titre,row.name);
+                    var taux=stringsum.compareString(jsonObject.titre,row.name);
                     if(taux>=0.8){
                        find=1;
                       break;
@@ -260,7 +164,7 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
 
                     for(var y=0;y<nbfilm;y++){
                       var row=filmresult[y];
-                      var taux=compareString(jsonObject.titre,row.name);
+                      var taux=stringsum.compareString(jsonObject.titre,row.name);
 
                       if(taux>=0.8){
 
@@ -293,7 +197,7 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
                       idfilm=result.id;
 
                       var u1=new userfilm(iduser,idfilm,date);
-                    
+
                       u1.adduserfilm(u1,function(err,date){if(err){console.log(err);}});
                       }else{
                         console.log("pas de resultat")
@@ -432,6 +336,8 @@ app.get("/:id/ListeFilm", function (req, res, next) {
     var userresult="";
     var movieresult="";
     var userfilm = models.userfilm;
+    var matricesummary=functiondict.matrice;
+    var matriceconst=new matricesummary();
     if(isNaN(req.params.id)){
       res.status(500);
     res.json({
@@ -470,7 +376,7 @@ app.get("/:id/ListeFilm", function (req, res, next) {
 
 
 
-            var matrice5=generatematrice(nbuser,nbmovie,results);
+            var matrice5=matriceconst.generatematrice(nbuser,nbmovie,results);
 
        var reqstat;
        var cp=0;
@@ -540,6 +446,8 @@ app.get("/:id/ListeFilm", function (req, res, next) {
     var nbmusique = 0;
     var userresult="";
     var musiqueresult="";
+    var matricesummary=functiondict.matrice;
+    var matriceconst=new matricesummary();
     if(isNaN(req.params.id)){
       res.status(500);
     res.json({
@@ -572,7 +480,7 @@ app.get("/:id/ListeFilm", function (req, res, next) {
         })
         usermusique.findAll().then(function (results) {
 
-          var matrice5=generatematricemusic(nbuser,nbmusique,results);
+          var matrice5=matriceconst.generatematricemusic(nbuser,nbmusique,results);
       var reqstat;
       var cp=0;
 
