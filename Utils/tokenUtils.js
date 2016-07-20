@@ -12,6 +12,7 @@ tokenUtils.prototype.addtoken=function(u1,callback){
 			console.log("token cr�er")
 			callback(undefined,result)
 		}).catch(function(err){
+
 			console.log("token pas cr�er")
 			callback(err,undefined);
 

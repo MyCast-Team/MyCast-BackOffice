@@ -177,7 +177,30 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
                     if(find==0){
                       var u1=new film(jsonObject.titre,jsonObject.author,jsonObject.date,jsonObject.duration,jsonObject.genre)
                       u1.addfilm(u1,function (err, data) {
-                          res.send(data)
+                        var request = {
+                            "where": {
+                                name: jsonObject.titre,
+                                director:jsonObject.author,
+                                type:jsonObject.genre
+
+                            }
+                        }
+                       iduser=jsonObject.iduser;
+
+                        filmmod.findOne(request).then(function(result){
+
+                          if(result){
+
+                          idfilm=result.id;
+
+                          var u1=new userfilm(iduser,idfilm,date);
+
+                          u1.adduserfilm(u1,function(err,date){if(err){console.log(err);}});
+                          }else{
+                            console.log("pas de resultat")
+                          }
+
+                        })
                       });
                     }
                     var request = {

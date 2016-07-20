@@ -27,6 +27,7 @@ filmutils.prototype.addfilm=function(u1,callback){
 			callback(undefined,result)
 		}).catch(function(err){
 			console.log("film pas creer")
+			callback(err,undefined)
 		});
 
 
