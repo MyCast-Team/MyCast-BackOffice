@@ -148,14 +148,14 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
                 if(jsonObject.type=='audio'){
                   for(var y=0;y<musiqueresult.length;y++){
                     var row=musiqueresult[y];
-                    var taux=stringsum.compareString(jsonObject.titre,row.name);
+                    var taux=stringsum.compareString(jsonObject.title,row.name);
                     if(taux>=0.8){
                        find=1;
                       break;
                     }
                   }
                   if(find==0){
-                    var u1=new music(jsonObject.titre,jsonObject.author,jsonObject.date,jsonObject.length,jsonObject.genre)
+                    var u1=new music(jsonObject.title,jsonObject.author,jsonObject.date,jsonObject.length,jsonObject.genre)
                     u1.addmusique(u1,function (err, data) {
                       var request = {
                           "where": {
@@ -184,7 +184,7 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
                   }else{
                     var request = {
                         "where": {
-                            name: jsonObject.titre,
+                            name: jsonObject.title,
                             director:jsonObject.author,
                             type:jsonObject.genre
 
@@ -211,7 +211,7 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
 
                     for(var y=0;y<nbfilm;y++){
                       var row=filmresult[y];
-                      var taux=stringsum.compareString(jsonObject.titre,row.name);
+                      var taux=stringsum.compareString(jsonObject.title,row.name);
 
                       if(taux>=0.8){
 
@@ -222,11 +222,11 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
                       }
                     }
                     if(find==0){
-                      var u1=new film(jsonObject.titre,jsonObject.author,jsonObject.date,jsonObject.length,jsonObject.genre)
+                      var u1=new film(jsonObject.title,jsonObject.author,jsonObject.date,jsonObject.length,jsonObject.genre)
                       u1.addfilm(u1,function (err, data) {
                         var request = {
                             "where": {
-                                name: jsonObject.titre,
+                                name: jsonObject.title,
                                 director:jsonObject.author,
                                 type:jsonObject.genre
 
@@ -253,7 +253,7 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
                     }else{
                     var request = {
                         "where": {
-                            name: jsonObject.titre,
+                            name: jsonObject.title,
                             director:jsonObject.author,
                             type:jsonObject.genre
 
