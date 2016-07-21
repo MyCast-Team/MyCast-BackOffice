@@ -1,1 +1,1 @@
-process.env.NODE_ENV = 'develop';
+process.env.NODE_ENV = 'test';
