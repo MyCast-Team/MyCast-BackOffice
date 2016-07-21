@@ -25,7 +25,7 @@
         <form id="addmusique" method="post">
           titre:  <input type="text" name="title">
           chanteur:  <input type="text" name="singer">
-          producteur  <input type="text" name="producer">
+
           type  <input type="text" name="type">
           <!--<input type="text" name="date">-->
             <input type="button"  id="buttonadd" value="valider">
@@ -36,7 +36,7 @@
           <input type="hidden" id="idfield" name="id">
           <input type="text"  id="titlefield" name="title">
           <input type="text" id="singerfield" name="singer">
-          <input type="text"  id="producerfield" name="producer">
+
           <input type="text"  id="typefield" name="type">
           <input type="text" id="datefield" name="date">
             <input type="text" id="lenfield" name="len">
@@ -101,7 +101,7 @@ $.ajax({
 
                   $("#idfield").val(response.id);
                   $("#singerfield").val(response.singer);
-                  $("#producerfield").val(response.producer);
+                
                   $("#titlefield").val(response.title);
                   $("#typefield").val(response.type);
                   $("#datefield").val(response.date);

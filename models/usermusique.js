@@ -5,7 +5,7 @@ module.exports=sequelize.import("usermusique",function(sequelize,datatypes){
 		iduser:{
 			type: datatypes.BIGINT,
 			primaryKey:true,
-			autoIncrement:true
+		
 		},
 		idmusique:{
 			type: datatypes.BIGINT,

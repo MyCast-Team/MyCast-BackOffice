@@ -1,8 +1,8 @@
 var models=require("../models");
-var musiqueutils=function(singer,producer,title,type,length,date){
+var musiqueutils=function(singer,title,type,length,date){
 
 	this.singer=singer;
-	this.producer=producer;
+
 	this.title=title;
 	this.type=type;
 	this.length=length;
@@ -16,7 +16,7 @@ musiqueutils.prototype.addmusique=function(u1,callback){
 		if(u1){
 		musique.create({
 			"singer":u1.singer,
-			"producer" : u1.producer,
+
 			"title": u1.title,
 			"type" : u1.type,
 			"length":u1.length,

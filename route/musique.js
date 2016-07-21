@@ -5,8 +5,8 @@ module.exports = function (app) {
     app.post("/addmusique", function (req, res, next) {
         var musique = utils.musique;
         console.log(utils);
-        if (req.body.singer && req.body.producer && req.body.title && req.body.type && req.body.length && req.body.date) {
-            var u1 = new musique(req.body.singer, req.body.producer, req.body.title, req.body.type,req.body.length,req.body.date);
+        if (req.body.singer && req.body.title && req.body.type && req.body.length && req.body.date) {
+            var u1 = new musique(req.body.singer,  req.body.title, req.body.type,req.body.length,req.body.date);
             u1.addmusique(u1, function (err, data) {
             res.send(data);
             });
@@ -121,11 +121,7 @@ module.exports = function (app) {
         var attributes = {};
         if (req.body.singer) {
             attributes.singer = req.body.singer;
-        }
-
-        if (req.body.producer) {
-            attributes.producer = req.body.producer;
-        }
+        }      
         if (req.body.title) {
             attributes.title = req.body.title;
         }

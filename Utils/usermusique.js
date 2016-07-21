@@ -11,7 +11,7 @@ usermusicutils.prototype.addusermusic=function(u1,callback){
 		if(u1){
 
 		usermusic.create({
-			"iduser":u1.idUser,
+			"iduser":u1.iduser,
 			"idmusique":u1.idmusic,
 			"date":u1.date
 		}).then(function(result){

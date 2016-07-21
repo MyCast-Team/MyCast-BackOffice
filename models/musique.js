@@ -11,9 +11,6 @@ module.exports=sequelize.import("musique",function(sequelize,datatypes){
 		singer :{
 			type: datatypes.STRING
 		},
-		producer:{
-			type: datatypes.STRING
-		},
 		title:{
 			type: datatypes.STRING
 		},

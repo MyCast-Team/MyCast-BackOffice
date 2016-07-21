@@ -5,6 +5,7 @@ var musique=require("./musiqueUtils");
 var plugin =require("./pluginUtils");
 var token=require("./tokenUtils");
 var userfilm=require("./userfilm");
+var usermusique=require("./usermusique");
 module.exports={
 	"user" : user,
         "film":film,
@@ -12,5 +13,6 @@ module.exports={
         "admin":admin,
         "plugin":plugin,
 		"token":token,
-		"userfilm":userfilm
+		"userfilm":userfilm,
+		"usermusic":usermusique
 };

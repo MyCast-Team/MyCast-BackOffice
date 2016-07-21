@@ -16,7 +16,7 @@ module.exports={
         "film":film,
         "musique":musique,
         "userfilm":userfilm,
-        "usermusique":usermusique,
+        "usermusic":usermusique,
         "admin":admin,
         "plugin":plugin,
         "userplugin":userplugin,

@@ -124,6 +124,7 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
   var filmmod=models.film;
   var musicmod=models.musique;
   var userfilm=utils.userfilm;
+  var usermusic=utils.usermusic;
   var Stringsummary=functiondict.string;
   var stringsum=new Stringsummary();
   var filmresult="";
@@ -148,8 +149,9 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
                 if(jsonObject.type=='audio'){
                   for(var y=0;y<musiqueresult.length;y++){
                     var row=musiqueresult[y];
-                    var taux=stringsum.compareString(jsonObject.title,row.name);
+                    var taux=stringsum.compareString(jsonObject.title,row.title);
                     if(taux>=0.8){
+                        jsonObject.title=row.title;
                        find=1;
                       break;
                     }
@@ -159,20 +161,19 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
                     u1.addmusique(u1,function (err, data) {
                       var request = {
                           "where": {
-                              name: jsonObject.titre,
-                              director:jsonObject.artist,
+                              title: jsonObject.title,
+                              singer:jsonObject.artist,
                               type:jsonObject.genre
 
                           }
                       }
                       musicmod.findOne(request).then(function(result){
                         if(result){
-                          iduser=jsoncontent[0].id;
-
-
+                        iduser=jsoncontent[0].id;
+                        console.log("here iduser = "+iduser);
                         idmusic=result.id;
 
-                        var u1=new usermusique(iduser,idmusic,date);
+                        var u1=new usermusic(iduser,idmusic,date);
 
                         u1.addusermusic(u1,function(err,date){if(err){console.log(err);}});
                         }else{
@@ -184,20 +185,19 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
                   }else{
                     var request = {
                         "where": {
-                            name: jsonObject.title,
-                            director:jsonObject.artist,
+                          title: jsonObject.title,
+                          singer:jsonObject.artist,
                             type:jsonObject.genre
 
                         }
                     }
                     musicmod.findOne(request).then(function(result){
                       if(result){
-                        iduser=jsoncontent[0].id;
-
-
+                      iduser=jsoncontent[0].id;
+                          console.log("here iduser = "+iduser);
                       idmusic=result.id;
 
-                      var u1=new usermusique(iduser,idmusic,date);
+                      var u1=new usermusic(iduser,idmusic,date);
 
                       u1.addusermusic(u1,function(err,date){if(err){console.log(err);}});
                       }else{
@@ -215,7 +215,7 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
 
                       if(taux>=0.8){
 
-                        jsonObject.titre=row.name;
+                        jsonObject.title=row.name;
 
                          find=1;
                         break;
