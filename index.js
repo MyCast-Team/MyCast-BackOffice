@@ -514,7 +514,7 @@ app.get("/:id/ListeFilm", function (req, res, next) {
 
     app.get("/:id/ListeMusique", function (req, res, next) {
     var user = models.user;
-    var usermusique = models.usermusique;
+    var usermusique = models.usermusic;
     var musique = models.musique;
     var nbuser = 0;
     var nbmusique = 0;
@@ -545,6 +545,7 @@ app.get("/:id/ListeFilm", function (req, res, next) {
             nbmusique = results.length;
             musiqueresult=results;
         }).catch(function (err) {
+            console.log(err);
             res.status(500);
             res.json({
                 "code": 2,
