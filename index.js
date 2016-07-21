@@ -155,12 +155,12 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
                     }
                   }
                   if(find==0){
-                    var u1=new music(jsonObject.title,jsonObject.author,jsonObject.date,jsonObject.length,jsonObject.genre)
+                    var u1=new music(jsonObject.title,jsonObject.artist,jsonObject.date,jsonObject.length,jsonObject.genre)
                     u1.addmusique(u1,function (err, data) {
                       var request = {
                           "where": {
                               name: jsonObject.titre,
-                              director:jsonObject.author,
+                              director:jsonObject.artist,
                               type:jsonObject.genre
 
                           }
@@ -185,7 +185,7 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
                     var request = {
                         "where": {
                             name: jsonObject.title,
-                            director:jsonObject.author,
+                            director:jsonObject.artist,
                             type:jsonObject.genre
 
                         }
@@ -222,12 +222,12 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
                       }
                     }
                     if(find==0){
-                      var u1=new film(jsonObject.title,jsonObject.author,jsonObject.date,jsonObject.length,jsonObject.genre)
+                      var u1=new film(jsonObject.title,jsonObject.artist,jsonObject.date,jsonObject.length,jsonObject.genre)
                       u1.addfilm(u1,function (err, data) {
                         var request = {
                             "where": {
                                 name: jsonObject.title,
-                                director:jsonObject.author,
+                                director:jsonObject.artist,
                                 type:jsonObject.genre
 
                             }
@@ -254,7 +254,7 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
                     var request = {
                         "where": {
                             name: jsonObject.title,
-                            director:jsonObject.author,
+                            director:jsonObject.artist,
                             type:jsonObject.genre
 
                         }
