@@ -1,55 +1,29 @@
 var models=require("../models");
-var userutils=function(idlibrary,lastname,firstname,email,birthdate){
-
-	this.idlibrary=idlibrary;
-	this.lastname=lastname;
-	this.firstname=firstname;
-	this.email=email;
-	this.birthdate=birthdate;
+var usermusicutils=function(iduser,idmusic,date){
+	this.iduser=iduser;
+	this.idmusic=idmusic;
+	this.date=date;
 
 }
 
-userutils.prototype.adduser=function(u1,callback){
-		var user=models.user;
+usermusicutils.prototype.addusermusic=function(u1,callback){
+		var usermusic=models.usermusic;
 		if(u1){
-		user.create({
-			"id_library":u1.idlibrary,
-			"lastname" : u1.lastname,
-			"firstname": u1.firstname,
-			"email" : u1.email,
-			"birthdate" :u1.birthdate,
 
+		usermusic.create({
+			"iduser":u1.idUser,
+			"idmusique":u1.idmusic,
+			"date":u1.date
 		}).then(function(result){
-			console.log("user cr�er")
+			console.log("usermusic creer")
 			callback(undefined,result)
 		}).catch(function(err){
-			console.log("user pas cr�er")
+			console.log(err);
+			console.log("usermusic pas creer")
 		});
 
 
 	}
 }
-userutils.prototype.update=function(request,attributes,callback){
-		var user=models.user;
-		user.find(request).then(function(results){
-			if(results){
 
-				results.updateAttributes(attributes).then(function(results){
-					console.log("user update");
-					callback(undefined,results);
-
-
-				}).catch(function(err){
-					console.log("user pas  update");
-				})
-			}else{
-				console.log("pas de result")
-			}
-
-		}).catch(function(err){
-			console.log(err);
-		});
-
-}
-
-module.exports=userutils;
+module.exports=usermusicutils;

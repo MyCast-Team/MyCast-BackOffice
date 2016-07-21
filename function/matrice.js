@@ -26,6 +26,7 @@ matricesummary.prototype.generatematrice=function(nbuser,nb,results){
           matrice5.subset(math.index(row.idUser - 1, row.idFilm - 1), 0);
       }
   }
+  console.log(matrice5);
   return matrice5;
 }
 

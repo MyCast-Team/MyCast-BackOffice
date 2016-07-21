@@ -140,10 +140,10 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
        filmresult=results;
        musicmod.findAll().then(function(result){
               musiqueresult=result;
-              var jsonObject=JSON.parse(contents);
+              var jsoncontent=JSON.parse(contents);
               var find=0;
-              jsonObject.forEach(function(jsonObject, i){
-
+              jsoncontent.forEach(function(jsonObject, i){
+                if(i!=0){
                  find=0;
                 if(jsonObject.type=='audio'){
                   for(var y=0;y<musiqueresult.length;y++){
@@ -155,11 +155,58 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
                     }
                   }
                   if(find==0){
-                    var u1=new music(jsonObject.titre,jsonObject.author,jsonObject.date,jsonObject.duration,jsonObject.genre)
-                    u1.addfilm(u1,function (err, data) {
-                        res.send(data)
+                    var u1=new music(jsonObject.titre,jsonObject.author,jsonObject.date,jsonObject.length,jsonObject.genre)
+                    u1.addmusique(u1,function (err, data) {
+                      var request = {
+                          "where": {
+                              name: jsonObject.titre,
+                              director:jsonObject.author,
+                              type:jsonObject.genre
+
+                          }
+                      }
+                      musicmod.findOne(request).then(function(result){
+                        if(result){
+                          iduser=jsoncontent[0].id;
+
+
+                        idmusic=result.id;
+
+                        var u1=new usermusique(iduser,idmusic,date);
+
+                        u1.addusermusic(u1,function(err,date){if(err){console.log(err);}});
+                        }else{
+                          console.log("pas de resultat")
+                        }
+
+                      })
+                    });
+                  }else{
+                    var request = {
+                        "where": {
+                            name: jsonObject.titre,
+                            director:jsonObject.author,
+                            type:jsonObject.genre
+
+                        }
+                    }
+                    musicmod.findOne(request).then(function(result){
+                      if(result){
+                        iduser=jsoncontent[0].id;
+
+
+                      idmusic=result.id;
+
+                      var u1=new usermusique(iduser,idmusic,date);
+
+                      u1.addusermusic(u1,function(err,date){if(err){console.log(err);}});
+                      }else{
+                        console.log("pas de resultat")
+                      }
+
                     });
                   }
+
                 }else{
 
                     for(var y=0;y<nbfilm;y++){
@@ -175,7 +222,7 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
                       }
                     }
                     if(find==0){
-                      var u1=new film(jsonObject.titre,jsonObject.author,jsonObject.date,jsonObject.duration,jsonObject.genre)
+                      var u1=new film(jsonObject.titre,jsonObject.author,jsonObject.date,jsonObject.length,jsonObject.genre)
                       u1.addfilm(u1,function (err, data) {
                         var request = {
                             "where": {
@@ -185,11 +232,12 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
 
                             }
                         }
-                       iduser=jsonObject.iduser;
 
                         filmmod.findOne(request).then(function(result){
 
                           if(result){
+                            iduser=jsoncontent[0].id;
+
 
                           idfilm=result.id;
 
@@ -202,7 +250,7 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
 
                         })
                       });
-                    }
+                    }else{
                     var request = {
                         "where": {
                             name: jsonObject.titre,
@@ -211,11 +259,12 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
 
                         }
                     }
-                   iduser=jsonObject.iduser;
+
 
                     filmmod.findOne(request).then(function(result){
 
                       if(result){
+                        iduser=jsoncontent[0].id;
 
                       idfilm=result.id;
 
@@ -227,9 +276,11 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
                       }
 
                     })
+                    }
 
 
                 }
+              }
               });
            }).catch(function (err) {
                 console.log(err)
