@@ -1,14 +1,17 @@
 var models=require("../models");
-var tokenUtils=function(id){
+var tokenUtils=function(id,date){
 	this.id=id;
+	this.date=date;
 }
 
 tokenUtils.prototype.addtoken=function(u1,callback){
 		var token=models.token;
 		if(u1){
 		token.create({
-			"idUser" : u1.id
+			"idUser" : u1.id,
+			"date":u1.date
 		}).then(function(result){
+			
 			console.log("token cr�er")
 			callback(undefined,result)
 		}).catch(function(err){
@@ -28,6 +31,7 @@ tokenUtils.prototype.delete = function(idtoken, callback) {
 		token.find({
 			"where" : {
 				idUser : idtoken
+
 			}
 		}).then(function(result) {
 			if(result) {

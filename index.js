@@ -33,7 +33,7 @@ var storage2 = multer.diskStorage({
     }
 });
 var secret = '42';
-
+var timer=3600;
 app.set('superSecret',secret);
 function encrypt(text) {
     var cipher = crypto.createCipher('aes-256-ctr', secret)
@@ -56,7 +56,7 @@ app.use(session({
     secret: '2C44-4D44-WppQ38S',
     resave: true,
     saveUninitialized: true,
-    cookie:{maxAge:360000}
+    cookie:{maxAge:timer}
 }));
 
 app.use(bodyparser.urlencoded({
@@ -95,6 +95,7 @@ apiRoutes.use(function(req, res, next) {
       }
     });
   } else {
+    console.log("no Token provided")
     res.json({
     "code": 2,
     "message": "Sequelize error",
@@ -335,6 +336,7 @@ app.post("/addUser", function (req, res, next) {
 });
 app.post("/connection", function (req, res, next) {
     var admin = models.admin;
+    var tokenmod=models.token;
 	var Token = utils.token;
 
     var request = {
@@ -348,18 +350,60 @@ app.post("/connection", function (req, res, next) {
             //session if cette session correct autoriser connection
 
 
-			var u1=new Token(results.id);
+			var u1=new Token(results.id,Date.now()+timer);
 
 
 
 			u1.addtoken(u1,function(err, token){
 				if(err){
-            res.status(500);
-					  res.json({
-						"code": 500,
-						"message": "Sequelize error",
-						"error": "primaryKey"
-					})
+
+          request = {
+             "where": {
+                 idUser: results.id
+             }
+         }
+         tokenmod.findOne(request).then(function(result){
+
+           if(result.date>Date.now()){
+             var token = jwt.sign(results.id, app.get('superSecret'));
+            console.log("test date superieur se reconnect")
+             req.session.token = token;
+             res.send(token)
+
+           }else{
+             u1.delete(result.idUser,function(err,token){
+
+               if(err){
+                 console.log(err)
+                 res.status(500)//faire reagir la balise error de l'appel ajax
+                  res.json({
+                  "code": 2,
+                  "message": "Sequelize error",
+                  "error": "deletion failed"
+                })
+              }else{
+
+                u1.addtoken(u1,function(err,token){
+                  if(err){
+                    res.status(500)//faire reagir la balise error de l'appel ajax
+                     res.json({
+                     "code": 2,
+                     "message": "Sequelize error",
+                     "error": err
+                   })
+                 }else{
+                   var token = jwt.sign(results.id, app.get('superSecret'));
+                
+                   req.session.token = token;
+                   res.send(token);
+                 }
+                })
+
+              }
+             })
+           }
+         })
+
 				}else{
 						var token = jwt.sign(results.id, app.get('superSecret'));
 						console.log(token)
@@ -391,6 +435,8 @@ app.post("/connection", function (req, res, next) {
 }
 );
 app.get("/:id/ListeFilm", function (req, res, next) {
+
+
     var user = models.user;
     var film = models.film;
     var nbuser = 0;
