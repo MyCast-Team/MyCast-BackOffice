@@ -128,6 +128,11 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
                   for(var y=0;y<musiqueresult.length;y++){
                     var row=musiqueresult[y];
                     var taux=stringsum.compareString(jsonObject.title,row.title);
+                    if(jsonObject.artist!=""){
+                    var tauxartist=stringsum.compareString(jsonObject.artist,row.singer);
+                    taux=(taux+tauxartist)/2;
+                    }
+
                     if(taux>=0.8){
                         jsonObject.title=row.title;
                        find=1;
@@ -190,7 +195,10 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
                     for(var y=0;y<nbfilm;y++){
                       var row=filmresult[y];
                       var taux=stringsum.compareString(jsonObject.title,row.name);
-
+                      if(jsonObject.artist!=""){
+                      var tauxartist=stringsum.compareString(jsonObject.artist,row.director);
+                      taux=(taux+tauxartist)/2;
+                      }
                       if(taux>=0.8){
 
                         jsonObject.title=row.name;
@@ -371,7 +379,7 @@ app.post("/connection", function (req, res, next) {
 
            if(result.date>Date.now()){
              var token = jwt.sign(results.id, app.get('superSecret'));
-            console.log("test date superieur se reconnect")
+
              req.session.token = token;
              res.send(token)
 
@@ -600,7 +608,7 @@ app.get("/:id/ListeFilm", function (req, res, next) {
       var reqstat;
       var cp=0;
 
-
+        console.log("here");
          for (var t = 0; t < userresult.length; t++) {
                 var rowuser = userresult[t];
 
@@ -615,7 +623,6 @@ app.get("/:id/ListeFilm", function (req, res, next) {
                               "user": rowuser.id,
                               "singer":row.singer,
                               "title": row.title,
-                              "producer":row.producer,
                               "type":row.type,
                               "length": row.length,
                               "date":row.date
