@@ -65,6 +65,8 @@ describe('user',function(){
 
 			});
 		})
-
+		it("should get an Answer", function(){
+			return request(api).get('/7/ListeMusique').expect(200);
+		})
 	})
 });

@@ -545,7 +545,7 @@ app.get("/:id/ListeFilm", function (req, res, next) {
         })
         usermusique.findAll().then(function (results) {
 
-          var matrice5=matriceconst.generatematricemusic(userresult,usermusique,results);
+          var matrice5=matriceconst.generatematricemusic(userresult,musiqueresult,results);
       var reqstat;
       var cp=0;
 
