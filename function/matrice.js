@@ -94,10 +94,9 @@ matricesummary.prototype.generatematricemusic=function(resultuser,resultmusic,re
   var matrice4 = math.multiply(matrice3, matriceprime);
   var matrice5 = math.transpose(matrice4);
 
-
   for (var i = 0, len = results.length; i < len; i++) {
       var row = results[i];
-      if (matrice.subset(math.index(tabuserid.indexOf(row.iduser),tabmusicid.indexOf(row.idmusique))) >1) {
+      if (matrice5.subset(math.index(tabuserid.indexOf(row.iduser),tabmusicid.indexOf(row.idmusique))) >1) {
           matrice5.subset(math.index(tabuserid.indexOf(row.iduser),tabmusicid.indexOf(row.idmusique)), 0);
       }
   }
