@@ -67,7 +67,7 @@ app.use(bodyparser.urlencoded({
 app.use(function(req, res, next) {
     if(Date.now()>req.session.cookie.expires){
 
-        console.log("test maxage");
+      
        req.session.destroy();
     }
   // if now() is after `req.session.cookie.expires`
@@ -393,7 +393,7 @@ app.post("/connection", function (req, res, next) {
                    })
                  }else{
                    var token = jwt.sign(results.id, app.get('superSecret'));
-                
+
                    req.session.token = token;
                    res.send(token);
                  }
