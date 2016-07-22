@@ -41,15 +41,6 @@ function encrypt(text) {
     crypted += cipher.final('hex');
     return crypted;
 }
-/*var unless = function(path, middleware) {
-    return function(req, res, next) {
-        if (path === req.path) {
-            return next();
-        } else {
-            return middleware(req, res, next);
-        }
-    };
-};*/
 
 
 app.use(session({
@@ -66,8 +57,6 @@ app.use(bodyparser.urlencoded({
 
 app.use(function(req, res, next) {
     if(Date.now()>req.session.cookie.expires){
-
-      
        req.session.destroy();
     }
   // if now() is after `req.session.cookie.expires`
