@@ -86,8 +86,8 @@ matricesummary.prototype.generatematricemusic=function(resultuser,resultmusic,re
       var row = results[i];
 
 
-      matrice.subset(math.index(tabuserid.indexOf(row.idUser),tabmusicid.indexOf(row.idmusique)), 1);
-      matriceprime.subset(math.index(tabmusicid.indexOf(row.idmusique),tabuserid.indexOf(row.idUser)), 1);
+      matrice.subset(math.index(tabuserid.indexOf(row.iduser),tabmusicid.indexOf(row.idmusique)), 1);
+      matriceprime.subset(math.index(tabmusicid.indexOf(row.idmusique),tabuserid.indexOf(row.iduser)), 1);
 
   }
   var matrice3 = math.multiply(matriceprime, matrice);
@@ -97,8 +97,8 @@ matricesummary.prototype.generatematricemusic=function(resultuser,resultmusic,re
 
   for (var i = 0, len = results.length; i < len; i++) {
       var row = results[i];
-      if (matrice.subset(math.index(tabuserid.indexOf(row.idUser),tabmusicid.indexOf(row.idmusique))) >1) {
-          matrice5.subset(math.index(tabuserid.indexOf(row.idUser),tabmusicid.indexOf(row.idmusique)), 0);
+      if (matrice.subset(math.index(tabuserid.indexOf(row.iduser),tabmusicid.indexOf(row.idmusique))) >1) {
+          matrice5.subset(math.index(tabuserid.indexOf(row.iduser),tabmusicid.indexOf(row.idmusique)), 0);
       }
   }
   return matrice5;

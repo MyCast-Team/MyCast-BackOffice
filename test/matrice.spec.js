@@ -13,6 +13,26 @@ describe('Matricesummary',function(){
 		})
 		it("generatematrice should return an array", function(){
 			var matrice=new Matricesummary();
+			resultuser=[{
+				"id":1
+			},
+			{
+				"id":2
+			},
+			{
+				"id":3
+			}
+			]
+			resultmovie=[{
+				"id":1
+			},
+			{
+				"id":2
+			},
+			{
+				"id":3
+			}
+			]
 			results=[{
 				"idUser":1,
 				"idFilm":2
@@ -26,7 +46,7 @@ describe('Matricesummary',function(){
 				"idFilm":3
 			}]
 
-			expect(matrice.generatematrice(10,10,results)).that.is.an('object');
+			expect(matrice.generatematrice(resultuser,resultmovie,results)).that.is.an('object');
 		})
 	})
 	describe('generatematricemusic',function(){
@@ -36,6 +56,26 @@ describe('Matricesummary',function(){
 		})
 		it("generatematricemusic should return an object", function(){
 			var matrice=new Matricesummary();
+			resultuser=[{
+				"id":1
+			},
+			{
+				"id":2
+			},
+			{
+				"id":3
+			}
+			]
+			resultmusic=[{
+				"id":1
+			},
+			{
+				"id":2
+			},
+			{
+				"id":3
+			}
+			]
 			results=[{
 				"iduser":1,
 				"idmusique":2
@@ -45,11 +85,11 @@ describe('Matricesummary',function(){
 				"idmusique":1
 			},
 			{
-				"iduser":2,
+				"iduser":3,
 				"idmusique":3
 			}]
 
-			expect(matrice.generatematricemusic(10,10,results)).that.is.an('object');
+			expect(matrice.generatematricemusic(resultuser,resultmusic,results)).that.is.an('object');
 		})
 	})
 
