@@ -6,11 +6,14 @@ module.exports=sequelize.import("token",function(sequelize,datatypes){
 			type: datatypes.BIGINT,
 			primaryKey:true
 
+		},
+		date:{
+			type:datatypes.BIGINT
 		}
 	}, {
 		paranoid:false,
 		freezeTableName:true,
 		underscored:true
-	
+
 	});
 })

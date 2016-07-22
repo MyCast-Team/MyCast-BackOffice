@@ -21,13 +21,7 @@ describe('user',function(){
 			});
 
 		})
-		it("should not be authorized to create a new contact with a registered id", function(){
-			return request(api).post('/connection').type('form').send({ login: 'test', password: 'test2016' }).expect(500).expect({
-				"code": 500,
-				"message": "Sequelize error",
-				"error": "primaryKey"
-			});
-		})
+	
 	})
 	describe("GET /ListeUser",function(){
 		it("should  display a list of user", function(){
