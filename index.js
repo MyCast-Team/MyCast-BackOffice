@@ -83,17 +83,8 @@ app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 app.use('/js', express.static(__dirname + '/node_modules/jquery/dist')); // redirect CSS bootstrap
 app.use("/",express.static('Client'))
 apiRoutes.use(function(req, res, next) {
-
-  // check header or url parameters or post parameters for token
- // req.headers.authorization=153365;
-
   var token =(req.session.token) || (req.body.token)|| (req.headers.token);
-
-
-  // decode token
   if (token) {
-
-    // verifies secret and checks exp
     jwt.verify(token, app.get('superSecret'), function(err, decoded) {
       if (err) {
         console.log(err);
@@ -103,10 +94,7 @@ apiRoutes.use(function(req, res, next) {
         next();
       }
     });
-
   } else {
-
-
     res.json({
     "code": 2,
     "message": "Sequelize error",
@@ -437,6 +425,7 @@ app.get("/:id/ListeFilm", function (req, res, next) {
 
         film.findAll().then(function (results) {
             nbmovie = results.length;
+
             movieresult=results;
         }).catch(function (err) {
               res.status(500);
@@ -450,7 +439,7 @@ app.get("/:id/ListeFilm", function (req, res, next) {
 
 
 
-            var matrice5=matriceconst.generatematrice(nbuser,nbmovie,results);
+            var matrice5=matriceconst.generatematrice(userresult,movieresult,results);
 
        var reqstat;
        var cp=0;
@@ -501,6 +490,7 @@ app.get("/:id/ListeFilm", function (req, res, next) {
 
         }).catch(function (err) {
             res.status(500);
+            console.log(err);
             res.json({
                 "code": 2,
                 "message": "Sequelize error in userfilm",
