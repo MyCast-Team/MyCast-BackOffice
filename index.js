@@ -299,22 +299,24 @@ app.post("/plugin", multer({storage: storage}).single('plugin'), function (req, 
               "error": "plugin already exist"
           })
 
+        }else{
+          u1.addplugin(u1, function (err, data) {
+               if(err){
+
+                 res.json({
+                     "code": 2,
+                     "message": "Sequelize error",
+                     "error": err
+                 })
+               }else{
+
+                   res.send(data);
+               }
+
+          });
         }
       })
-        u1.addplugin(u1, function (err, data) {
-             if(err){
 
-               res.json({
-                   "code": 2,
-                   "message": "Sequelize error",
-                   "error": err
-               })
-             }else{
-
-                 res.send(data);
-             }
-
-        });
 
     }else{
         console.log("ya pas body author");
