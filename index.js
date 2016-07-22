@@ -275,7 +275,7 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
 });
 app.post("/plugin", multer({storage: storage}).single('plugin'), function (req, res, next) {
     var plugin = utils.plugin;
-
+    var pluginmod=models.plugin;
   if (req.body.author) {
         console.log("ya body author");
   if(req.file){
@@ -285,8 +285,22 @@ app.post("/plugin", multer({storage: storage}).single('plugin'), function (req, 
   }else{
   var u1 = new plugin(req.body.originalname, req.body.author);
   }
+      var request={
+        "where": {
+          "name":u1.name
+        }
+      }
+      pluginmod.findOne(request).then(function(result){
+        if(result){
+          res.status(500);
+          res.json({
+              "code": 2,
+              "message": "Sequelize error",
+              "error": "plugin already exist"
+          })
 
-
+        }
+      })
         u1.addplugin(u1, function (err, data) {
              if(err){
 
