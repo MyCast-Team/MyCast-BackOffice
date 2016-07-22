@@ -545,7 +545,7 @@ app.get("/:id/ListeFilm", function (req, res, next) {
         })
         usermusique.findAll().then(function (results) {
 
-          var matrice5=matriceconst.generatematricemusic(nbuser,nbmusique,results);
+          var matrice5=matriceconst.generatematricemusic(userresult,usermusique,results);
       var reqstat;
       var cp=0;
 
@@ -597,6 +597,7 @@ app.get("/:id/ListeFilm", function (req, res, next) {
               })
         }).catch(function (err) {
             res.status(500);
+            console.log(err);
             res.json({
                 "code": 2,
                 "message": "Sequelize error in usermusique",
