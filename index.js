@@ -79,6 +79,7 @@ apiRoutes.use(function(req, res, next) {
     });
   } else {
     console.log("no Token provided")
+    res.status(500)
     res.json({
     "code": 2,
     "message": "Sequelize error",

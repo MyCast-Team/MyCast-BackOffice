@@ -41,26 +41,26 @@ describe('user',function(){
 	})
 	describe("GET /:id/ListeFilm",function(){
 		it("should get an error", function(){
-			return request(api).get('/a/ListeFilm').expect(500).expect({
+			return request(api).get('/a/ListeFilm').type('form').send({token :"eyJhbGciOiJIUzI1NiJ9.Ng.hAGbSbFGDZMTqtfa7xzAVtf3ThZF_6KOJYjRVcFPaYI"}).expect(500).expect({
 				"code":"2",
 				"error":"Id is not a number",
 
 			});
 		})
 		it("should get an Answer", function(){
-			return request(api).get('/1/ListeFilm').send({token :"eyJhbGciOiJIUzI1NiJ9.Ng.hAGbSbFGDZMTqtfa7xzAVtf3ThZF_6KOJYjRVcFPaYI"}).expect(200);
+			return request(api).get('/1/ListeFilm').type('form').send({token :"eyJhbGciOiJIUzI1NiJ9.Ng.hAGbSbFGDZMTqtfa7xzAVtf3ThZF_6KOJYjRVcFPaYI"}).expect(200);
 		})
 	})
 	describe("GET /:id/ListeMusique",function(){
 		it("should get an error", function(){
-			return request(api).get('/a/ListeMusique').expect(500).expect({
+			return request(api).get('/a/ListeMusique').type('form').send({token :"eyJhbGciOiJIUzI1NiJ9.Ng.hAGbSbFGDZMTqtfa7xzAVtf3ThZF_6KOJYjRVcFPaYI"}).expect(500).expect({
 				"code":"2",
 				"error":"Id is not a number",
 
 			});
 		})
 		it("should get an Answer", function(){
-			return request(api).get('/7/ListeMusique').send({token :"eyJhbGciOiJIUzI1NiJ9.Ng.hAGbSbFGDZMTqtfa7xzAVtf3ThZF_6KOJYjRVcFPaYI"}).expect(200);
+			return request(api).get('/7/ListeMusique').type('form').send({token :"eyJhbGciOiJIUzI1NiJ9.Ng.hAGbSbFGDZMTqtfa7xzAVtf3ThZF_6KOJYjRVcFPaYI"}).expect(200);
 		})
 	})
 });
