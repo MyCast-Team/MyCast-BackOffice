@@ -16,14 +16,7 @@ var busboy = require('connect-busboy');
 //var cookie=require('cookie-parser');
 var apiRoutes = express.Router();
 var multer = require("multer");
-var storage = multer.diskStorage({
-    destination: function (req, file, callback) {
-        callback(null, './route/uploads');
-    },
-    filename: function (req, file, callback) {
-        callback(null, file.fieldname + '-' + file.originalname);
-    }
-});
+
 var storage2 = multer.diskStorage({
     destination: function (req, file, callback) {
         callback(null, './route/mediacase');
@@ -33,7 +26,7 @@ var storage2 = multer.diskStorage({
     }
 });
 var secret = '42';
-var timer=3600;
+var timer=360000;
 app.set('superSecret',secret);
 function encrypt(text) {
     var cipher = crypto.createCipher('aes-256-ctr', secret)
@@ -72,6 +65,7 @@ app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 app.use('/js', express.static(__dirname + '/node_modules/jquery/dist')); // redirect CSS bootstrap
 app.use("/",express.static('Client'))
 apiRoutes.use(function(req, res, next) {
+
   var token =(req.session.token) || (req.body.token)|| (req.headers.token);
   if (token) {
     jwt.verify(token, app.get('superSecret'), function(err, decoded) {
@@ -95,6 +89,117 @@ apiRoutes.use(function(req, res, next) {
 });
 
 
+
+
+app.post("/connection", function (req, res, next) {
+    var admin = models.admin;
+    var tokenmod=models.token;
+	var Token = utils.token;
+
+    var request = {
+        "where": {
+            login: req.body.login,
+            password: encrypt(new Buffer([req.body.password].toString()))
+        }
+    }
+    admin.findOne(request).then(function (results) {
+        if (results) {
+            //session if cette session correct autoriser connection
+
+
+			var u1=new Token(results.id,Date.now()+timer);
+
+
+
+			u1.addtoken(u1,function(err, token){
+				if(err){
+
+          request = {
+             "where": {
+                 idUser: results.id
+             }
+         }
+         tokenmod.findOne(request).then(function(result){
+
+           if(result.date>Date.now()){
+             var token = jwt.sign(results.id, app.get('superSecret'));
+
+             req.session.token = token;
+             res.send(token)
+
+           }else{
+             u1.delete(result.idUser,function(err,token){
+
+               if(err){
+                 console.log(err)
+                 res.status(500)//faire reagir la balise error de l'appel ajax
+                  res.json({
+                  "code": 2,
+                  "message": "Sequelize error",
+                  "error": "deletion failed"
+                })
+              }else{
+
+                u1.addtoken(u1,function(err,token){
+                  if(err){
+                    res.status(500)//faire reagir la balise error de l'appel ajax
+                     res.json({
+                     "code": 2,
+                     "message": "Sequelize error",
+                     "error": err
+                   })
+                 }else{
+                   var token = jwt.sign(results.id, app.get('superSecret'));
+
+                   req.session.token = token;
+                   res.send(token);
+                 }
+                })
+
+              }
+             })
+           }
+         })
+
+				}else{
+						var token = jwt.sign(results.id, app.get('superSecret'));
+						console.log(token)
+						req.session.token = token;
+					  res.send(token)
+
+
+				}
+			});
+
+
+        } else {
+            res.status(500)//faire reagir la balise error de l'appel ajax
+             res.json({
+             "code": 2,
+             "message": "Sequelize error",
+             "error": "No result"
+           })
+        }
+    }).catch(function (err) {
+		console.log(err)
+        res.json({
+            "code": 2,
+            "message": "Sequelize error",
+            "error": err
+        })
+    });
+
+}
+);
+
+
+
+
+
+
+
+
+app.use(apiRoutes);
 app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function (req, res, next) {
   var contents = fs.readFileSync("./route/mediacase/mediacase-mediacase.json");
   var film=utils.film;
@@ -281,170 +386,6 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
 
     res.send();
 });
-app.post("/plugin", multer({storage: storage}).single('plugin'), function (req, res, next) {
-    var plugin = utils.plugin;
-    var pluginmod=models.plugin;
-  if (req.body.author) {
-        console.log("ya body author");
-  if(req.file){
-
-    console.log(req.file.originalname)
-  var u1 = new plugin(req.file.originalname, req.body.author);
-  }else{
-  var u1 = new plugin(req.body.originalname, req.body.author);
-  }
-      var request={
-        "where": {
-          "name":u1.name
-        }
-      }
-      pluginmod.findOne(request).then(function(result){
-        if(result){
-          res.status(500);
-          res.json({
-              "code": 2,
-              "message": "Sequelize error",
-              "error": "plugin already exist"
-          })
-
-        }
-      })
-        u1.addplugin(u1, function (err, data) {
-             if(err){
-
-               res.json({
-                   "code": 2,
-                   "message": "Sequelize error",
-                   "error": err
-               })
-             }else{
-
-                 res.send(data);
-             }
-
-        });
-
-    }else{
-        console.log("ya pas body author");
-    }
-
-});
-app.post("/addUser", function (req, res, next) {
-
-    var user = utils.user;
-    var u1 = new user();
-    u1.adduser(u1, function (undefined, result) {
-      res.status(200);
-      res.json({
-        "user":"created",
-        "id":result.dataValues.id
-      });
-
-      res.send(result)
-    });
-
-
-});
-app.post("/connection", function (req, res, next) {
-    var admin = models.admin;
-    var tokenmod=models.token;
-	var Token = utils.token;
-
-    var request = {
-        "where": {
-            login: req.body.login,
-            password: encrypt(new Buffer([req.body.password].toString()))
-        }
-    }
-    admin.findOne(request).then(function (results) {
-        if (results) {
-            //session if cette session correct autoriser connection
-
-
-			var u1=new Token(results.id,Date.now()+timer);
-
-
-
-			u1.addtoken(u1,function(err, token){
-				if(err){
-
-          request = {
-             "where": {
-                 idUser: results.id
-             }
-         }
-         tokenmod.findOne(request).then(function(result){
-
-           if(result.date>Date.now()){
-             var token = jwt.sign(results.id, app.get('superSecret'));
-
-             req.session.token = token;
-             res.send(token)
-
-           }else{
-             u1.delete(result.idUser,function(err,token){
-
-               if(err){
-                 console.log(err)
-                 res.status(500)//faire reagir la balise error de l'appel ajax
-                  res.json({
-                  "code": 2,
-                  "message": "Sequelize error",
-                  "error": "deletion failed"
-                })
-              }else{
-
-                u1.addtoken(u1,function(err,token){
-                  if(err){
-                    res.status(500)//faire reagir la balise error de l'appel ajax
-                     res.json({
-                     "code": 2,
-                     "message": "Sequelize error",
-                     "error": err
-                   })
-                 }else{
-                   var token = jwt.sign(results.id, app.get('superSecret'));
-
-                   req.session.token = token;
-                   res.send(token);
-                 }
-                })
-
-              }
-             })
-           }
-         })
-
-				}else{
-						var token = jwt.sign(results.id, app.get('superSecret'));
-						console.log(token)
-						req.session.token = token;
-					  res.send(token)
-
-
-				}
-			});
-
-
-        } else {
-            res.status(500)//faire reagir la balise error de l'appel ajax
-             res.json({
-             "code": 2,
-             "message": "Sequelize error",
-             "error": "No result"
-           })
-        }
-    }).catch(function (err) {
-		console.log(err)
-        res.json({
-            "code": 2,
-            "message": "Sequelize error",
-            "error": err
-        })
-    });
-
-}
-);
 app.get("/:id/ListeFilm", function (req, res, next) {
 
 
@@ -464,10 +405,8 @@ app.get("/:id/ListeFilm", function (req, res, next) {
         "error": "Id is not a number"
     })
     }else{
-    fs.truncate('filmuser.json', 0, function(){console.log('done')})
-
-
-
+    fs.truncate("filmuser.json", 0, function(){console.log('done')})
+    fs.truncate('musiqueuser.json', 0, function(){console.log('musiqueuser done')})
         user.findAll().then(function (results) {
             nbuser = results.length;
             userresult=results;
@@ -556,164 +495,109 @@ app.get("/:id/ListeFilm", function (req, res, next) {
         })
       }
 });
-
-
-
-    app.get("/:id/ListeMusique", function (req, res, next) {
-    var user = models.user;
-    var usermusique = models.usermusic;
-    var musique = models.musique;
-    var nbuser = 0;
-    var nbmusique = 0;
-    var userresult="";
-    var musiqueresult="";
-    var matricesummary=functiondict.matrice;
-    var matriceconst=new matricesummary();
-    if(isNaN(req.params.id)){
-      res.status(500);
-    res.json({
-        "code": 2,
-        "error": "Id is not a number"
+app.get("/:id/ListeMusique", function (req, res, next) {
+var user = models.user;
+var usermusique = models.usermusic;
+var musique = models.musique;
+var nbuser = 0;
+var nbmusique = 0;
+var userresult="";
+var musiqueresult="";
+var matricesummary=functiondict.matrice;
+var matriceconst=new matricesummary();
+if(isNaN(req.params.id)){
+  res.status(500);
+res.json({
+    "code": 2,
+    "error": "Id is not a number"
+})
+}else{
+fs.truncate('musiqueuser.json', 0, function(){console.log('done')})
+    user.findAll().then(function (results) {
+        nbuser = results.length;
+        userresult=results;
+    }).catch(function (err) {
+        res.status(500);
+        res.json({
+            "code": 2,
+            "message": "Sequelize error in user",
+            "error": "Can't find user"
+        })
     })
-    }else{
-    fs.truncate('musiqueuser.json', 0, function(){console.log('done')})
-        user.findAll().then(function (results) {
-            nbuser = results.length;
-            userresult=results;
-        }).catch(function (err) {
-            res.status(500);
-            res.json({
-                "code": 2,
-                "message": "Sequelize error in user",
-                "error": "Can't find user"
-            })
+    musique.findAll().then(function (results) {
+        nbmusique = results.length;
+        musiqueresult=results;
+    }).catch(function (err) {
+        console.log(err);
+        res.status(500);
+        res.json({
+            "code": 2,
+            "message": "Sequelize error in musique",
+            "error": "can't find music"
         })
-        musique.findAll().then(function (results) {
-            nbmusique = results.length;
-            musiqueresult=results;
-        }).catch(function (err) {
-            console.log(err);
-            res.status(500);
-            res.json({
-                "code": 2,
-                "message": "Sequelize error in musique",
-                "error": "can't find music"
-            })
-        })
-        usermusique.findAll().then(function (results) {
+    })
+    usermusique.findAll().then(function (results) {
 
-          var matrice5=matriceconst.generatematricemusic(userresult,musiqueresult,results);
-      var reqstat;
-      var cp=0;
+      var matrice5=matriceconst.generatematricemusic(userresult,musiqueresult,results);
+  var reqstat;
+  var cp=0;
 
-        console.log("here");
-         for (var t = 0; t < userresult.length; t++) {
-                var rowuser = userresult[t];
+    console.log("here");
+     for (var t = 0; t < userresult.length; t++) {
+            var rowuser = userresult[t];
 
 
-                for (var i = 0, len = musiqueresult.length; i < len; i++) {
+            for (var i = 0, len = musiqueresult.length; i < len; i++) {
 
-                    var row = musiqueresult[i];
-
-
-                    if (matrice5.subset(math.index(t, i)) != 0 && rowuser.id==req.params.id) {
-                      reqstat =  {
-                              "user": rowuser.id,
-                              "singer":row.singer,
-                              "title": row.title,
-                              "type":row.type,
-                              "length": row.length,
-                              "date":row.date
-                            }
-
-                      if(cp!=0){
-                      fs.appendFileSync("musiqueuser.json", ",")
-                      }else{
-                        fs.appendFileSync("musiqueuser.json", '[')
-
-                      }
-                      fs.appendFileSync("musiqueuser.json", JSON.stringify(reqstat) )
-
-                      cp++;
-                    }
+                var row = musiqueresult[i];
 
 
-                }
-            }
+                if (matrice5.subset(math.index(t, i)) != 0 && rowuser.id==req.params.id) {
+                  reqstat =  {
+                          "user": rowuser.id,
+                          "singer":row.singer,
+                          "title": row.title,
+                          "type":row.type,
+                          "length": row.length,
+                          "date":row.date
+                        }
 
+                  if(cp!=0){
+                  fs.appendFileSync("musiqueuser.json", ",")
+                  }else{
+                    fs.appendFileSync("musiqueuser.json", '[')
 
-
-            fs.appendFile("musiqueuser.json",  "]", function (err) {
-                  if (err) {
-                      throw err;
                   }
-                  res.status(200);
+                  fs.appendFileSync("musiqueuser.json", JSON.stringify(reqstat) )
 
-                    res.sendFile(__dirname+"/musiqueuser.json");
-              })
-        }).catch(function (err) {
-            res.status(500);
-            console.log(err);
-            res.json({
-                "code": 2,
-                "message": "Sequelize error in usermusique",
-                "error": err
-            })
-        })
-      }
-});
-
-
-app.get("/Listepluginjava", function (req, res, next) {
-            var plugin = models.plugin;
-			console.log("test")
-            plugin.findAll().then(function (results) {
-                 fs.truncate('plugin.json', 0, function(){console.log('done')})
-
-
-				res.send(results)
-
-            }).catch(function (err) {
-				console.log(err)
-                res.json({
-                    "code": 2,
-                    "message": "Sequelize error",
-                    "error": err
-                })
-            })
-
-
-    });
-	app.get("/getpluginjava/:id", function (req, res, next) {
-
-            var plugin = models.plugin;
-            var request = {
-                "where": {
-                    id: req.params.id
+                  cp++;
                 }
+
+
             }
-            plugin.findOne(request).then(function (results) {
-				console.log(results.name);
-				  var filePath = "/route/uploads/plugin-"+results.name;
-				  console.log(filePath)
-					res.sendFile(__dirname+filePath)
+        }
 
 
 
+        fs.appendFile("musiqueuser.json",  "]", function (err) {
+              if (err) {
+                  throw err;
+              }
+              res.status(200);
 
-            }).catch(function (err) {
-				console.log(err)
-                res.json({
-                    "code": 2,
-                    "message": "Sequelize error",
-                    "error": err
-                })
-            });
-
-
-
-    });
-app.use(apiRoutes);
+                res.sendFile(__dirname+"/musiqueuser.json");
+          })
+    }).catch(function (err) {
+        res.status(500);
+        console.log(err);
+        res.json({
+            "code": 2,
+            "message": "Sequelize error in usermusique",
+            "error": err
+        })
+    })
+  }
+});
 require('./route')(app);
 var port=process.env.PORT || DEFAULT_PORT;
 app.listen(port, function () {

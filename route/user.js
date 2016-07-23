@@ -21,7 +21,22 @@ module.exports = function (app) {
 
 
     });
+    app.post("/addUser", function (req, res, next) {
 
+        var user = utils.user;
+        var u1 = new user();
+        u1.adduser(u1, function (undefined, result) {
+          res.status(200);
+          res.json({
+            "user":"created",
+            "id":result.dataValues.id
+          });
+
+          res.send(result)
+        });
+
+
+    });
 
 
 

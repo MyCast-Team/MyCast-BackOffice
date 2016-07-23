@@ -82,6 +82,8 @@ matricesummary.prototype.generatematricemusic=function(resultuser,resultmusic,re
       }
 
   }
+  console.log(tabuserid);
+  console.log(tabmusicid);
   for (var i = 0, len = results.length; i < len; i++) {
       var row = results[i];
 
