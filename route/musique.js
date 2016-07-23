@@ -1,4 +1,6 @@
 var models = require("../models");
+
+
 var utils = require("../Utils");
 var fs = require("fs");
 module.exports = function (app) {
@@ -19,23 +21,6 @@ module.exports = function (app) {
 
             var musique = models.musique;
 
-            /*var request={};
-             if(req.query.limit){
-             request.limit=parseInt(req.query.limit);
-
-
-             }
-             if(req.query.offset){
-             request.offset=parseInt(req.query.offset);
-
-             }
-             if(req.query.lastname){
-             request.where={
-             "lastname":{
-             "$like":"%"+req.query.lastname+"%"
-             }
-             };
-             }*/
             musique.findAll().then(function (results) {
                 res.send(results);
             }).catch(function (err) {
@@ -121,7 +106,7 @@ module.exports = function (app) {
         var attributes = {};
         if (req.body.singer) {
             attributes.singer = req.body.singer;
-        }      
+        }
         if (req.body.title) {
             attributes.title = req.body.title;
         }

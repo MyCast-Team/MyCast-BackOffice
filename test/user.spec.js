@@ -21,7 +21,7 @@ describe('user',function(){
 			});
 
 		})
-	
+
 	})
 	describe("GET /ListeUser",function(){
 		it("should  display a list of user", function(){
@@ -48,7 +48,7 @@ describe('user',function(){
 			});
 		})
 		it("should get an Answer", function(){
-			return request(api).get('/1/ListeFilm').expect(200);
+			return request(api).get('/1/ListeFilm').send({token :"eyJhbGciOiJIUzI1NiJ9.Ng.hAGbSbFGDZMTqtfa7xzAVtf3ThZF_6KOJYjRVcFPaYI"}).expect(200);
 		})
 	})
 	describe("GET /:id/ListeMusique",function(){
@@ -60,7 +60,7 @@ describe('user',function(){
 			});
 		})
 		it("should get an Answer", function(){
-			return request(api).get('/7/ListeMusique').expect(200);
+			return request(api).get('/7/ListeMusique').send({token :"eyJhbGciOiJIUzI1NiJ9.Ng.hAGbSbFGDZMTqtfa7xzAVtf3ThZF_6KOJYjRVcFPaYI"}).expect(200);
 		})
 	})
 });

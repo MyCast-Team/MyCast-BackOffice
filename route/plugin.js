@@ -1,12 +1,112 @@
 var models = require("../models");
 var utils = require("../Utils");
-
-
-
+var multer = require("multer");
+var storage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, './uploads');
+    },
+    filename: function (req, file, callback) {
+        callback(null, file.fieldname + '-' + file.originalname);
+    }
+});
 var fs = require("fs");
 module.exports = function (app) {
+  app.get("/getpluginjava/:id", function (req, res, next) {
+
+            var plugin = models.plugin;
+            var request = {
+                "where": {
+                    id: req.params.id
+                }
+            }
+            plugin.findOne(request).then(function (results) {
+        console.log(results.name);
+          var filePath = "/route/uploads/plugin-"+results.name;
+          console.log(filePath)
+          res.sendFile(__dirname+filePath)
 
 
+
+
+            }).catch(function (err) {
+        console.log(err)
+                res.json({
+                    "code": 2,
+                    "message": "Sequelize error",
+                    "error": err
+                })
+            });
+
+
+
+    });
+    app.post("/plugin", multer({storage: storage}).single('plugin'), function (req, res, next) {
+        var plugin = utils.plugin;
+        var pluginmod=models.plugin;
+      if (req.body.author) {
+            console.log("ya body author");
+      if(req.file){
+
+        console.log(req.file.originalname)
+      var u1 = new plugin(req.file.originalname, req.body.author);
+      }else{
+      var u1 = new plugin(req.body.originalname, req.body.author);
+      }
+          var request={
+            "where": {
+              "name":u1.name
+            }
+          }
+          pluginmod.findOne(request).then(function(result){
+            if(result){
+              res.status(500);
+              res.json({
+                  "code": 2,
+                  "message": "Sequelize error",
+                  "error": "plugin already exist"
+              })
+
+            }
+          })
+            u1.addplugin(u1, function (err, data) {
+                 if(err){
+
+                   res.json({
+                       "code": 2,
+                       "message": "Sequelize error",
+                       "error": err
+                   })
+                 }else{
+
+                     res.send(data);
+                 }
+
+            });
+
+        }else{
+            console.log("ya pas body author");
+        }
+
+    });
+
+  app.get("/Listepluginjava", function (req, res, next) {
+              var plugin = models.plugin;
+
+              plugin.findAll().then(function (results) {
+
+          res.send(results)
+
+              }).catch(function (err) {
+          console.log(err)
+                  res.json({
+                      "code": 2,
+                      "message": "Sequelize error",
+                      "error": err
+                  })
+              })
+
+
+      });
     app.get("/Listeplugin", function (req, res, next) {
 
             var plugin = models.plugin;
