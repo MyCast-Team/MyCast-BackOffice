@@ -46,7 +46,7 @@ matricesummary.prototype.generatematrice=function(resultuser,resultmovie,results
   for (var i = 0, len = results.length; i < len; i++) {
       var row = results[i];
 
-      if (matrice5.subset(math.index(tabuserid.indexOf(row.idUser),tabfilmid.indexOf(row.idFilm))) >1) {
+      if (matrice5.subset(math.index(tabuserid.indexOf(row.idUser),tabfilmid.indexOf(row.idFilm))) >=1) {
           matrice5.subset(math.index(tabuserid.indexOf(row.idUser),tabfilmid.indexOf(row.idFilm)), 0);
       }
   }
@@ -98,7 +98,7 @@ matricesummary.prototype.generatematricemusic=function(resultuser,resultmusic,re
 
   for (var i = 0, len = results.length; i < len; i++) {
       var row = results[i];
-      if (matrice5.subset(math.index(tabuserid.indexOf(row.iduser),tabmusicid.indexOf(row.idmusique))) >1) {
+      if (matrice5.subset(math.index(tabuserid.indexOf(row.iduser),tabmusicid.indexOf(row.idmusique))) >=1) {
           matrice5.subset(math.index(tabuserid.indexOf(row.iduser),tabmusicid.indexOf(row.idmusique)), 0);
       }
   }
