@@ -11,7 +11,7 @@
           <ul class="nav nav-tabs">
               <li><a href="/listuser.html">Liste Users</a></li>
               <li><a href="/listfilm.html">Liste Films</a></li>
-              <li><a href="/listplugin.html">Liste plugins</a></li>
+              <li><a href="/listmusique.html">Liste Musiques</a></li>
               <li><a href="/listadmin.html">Liste Administrateurs</a></li>
               <li><a href="/listplugin.html">Liste Plugins</a></li>
       <li><a href="/deconnexion.html">Deconnexion</a></li>
@@ -29,7 +29,7 @@
             <input type="button" id="buttonadd" value="valider">
         </form>
       </div>
-        <button id='addbutton'>Add plugin</button>
+        <button  class='btn btn-default' id='addbutton'>Add plugin</button>
       <div id="update" class="hidden">
       <form action="/updateplugin" id="updateform" method="post"  >
 
@@ -49,7 +49,7 @@ $.ajax({
        var items = [];
       $.each( html, function( key, val ) {
 
-        items.push("<li >" +val.name +" "+ val.author + "<button id='deleteplugin' value="+val.id+">Delete</button><button id='updateplugin' value="+val.id+">Update</button></li> ");
+        items.push("<li >" +val.name +" "+ val.author + "<button id='deleteplugin'  class='btn btn-default' value="+val.id+">Delete</button><button  class='btn btn-default' id='updateplugin' value="+val.id+">Update</button></li> ");
       });
       $("#list").append(items);
     },

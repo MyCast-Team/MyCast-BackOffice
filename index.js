@@ -259,7 +259,7 @@ app.post("/mediacase", multer({storage: storage2}).single('mediacase'), function
                       musicmod.findOne(request).then(function(result){
                         if(result){
                         iduser=jsoncontent[0].id;
-                        console.log("here iduser = "+iduser);
+
                         idmusic=result.id;
 
                         var u1=new usermusic(iduser,idmusic,date);
@@ -508,8 +508,11 @@ app.get("/:id/ListeFilm", function (req, res, next) {
         "error": "Id is not a number"
     })
     }else{
-    fs.truncate("filmuser.json", 0, function(){console.log('done')})
-    fs.truncate('musiqueuser.json', 0, function(){console.log('musiqueuser done')})
+    fs.truncate("filmuser.json", 0, function(){  fs.appendFileSync("filmuser.json", '['); console.log('done')})
+
+
+
+
         user.findAll().then(function (results) {
             nbuser = results.length;
             userresult=results;
@@ -562,9 +565,6 @@ app.get("/:id/ListeFilm", function (req, res, next) {
 
                       if(cp!=0){
                       fs.appendFileSync("filmuser.json", ",")
-                      }else{
-                        fs.appendFileSync("filmuser.json", '[')
-
                       }
                       fs.appendFileSync("filmuser.json", JSON.stringify(reqstat) )
 
@@ -615,7 +615,9 @@ res.json({
     "error": "Id is not a number"
 })
 }else{
-fs.truncate('musiqueuser.json', 0, function(){console.log('done')})
+fs.truncate('musiqueuser.json', 0, function(){  fs.appendFileSync("musiqueuser.json", '[');console.log('done')})
+
+
     user.findAll().then(function (results) {
         nbuser = results.length;
         userresult=results;
@@ -667,8 +669,7 @@ fs.truncate('musiqueuser.json', 0, function(){console.log('done')})
 
                   if(cp!=0){
                   fs.appendFileSync("musiqueuser.json", ",")
-                  }else{
-                    fs.appendFileSync("musiqueuser.json", '[')
+
 
                   }
                   fs.appendFileSync("musiqueuser.json", JSON.stringify(reqstat) )

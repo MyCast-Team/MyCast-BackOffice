@@ -21,7 +21,7 @@
         <ul id="list">
 
         </ul>
-        <button id='add'>Add User</button>
+        <button  class='btn btn-default' id='add'>Add User</button>
     </body>
 </html>
 <script type="text/javascript">
@@ -32,7 +32,7 @@ $.ajax({
        var items = [];
       $.each( html, function( key, val ) {
 
-        items.push("<li >" + val.id + "<button id='deleteuser' value="+val.id+">Delete</button></li> ");
+        items.push("<li >" + val.id + "<button id='deleteuser'  class='btn btn-default' value="+val.id+">Delete</button></li> ");
       });
       $("#list").append(items);
     },
@@ -74,8 +74,7 @@ $("#add").on('click', function() {
     url : '/addUser',
     type : 'post',
     success : function(html){
-      console.log(html);
-      alert(html.id);
+
       location.reload();
    }
   })

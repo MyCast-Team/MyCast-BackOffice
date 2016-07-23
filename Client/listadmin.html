@@ -11,7 +11,7 @@
           <ul class="nav nav-tabs">
               <li><a href="/listuser.html">Liste Users</a></li>
               <li><a href="/listfilm.html">Liste Films</a></li>
-              <li><a href="/listadmin.html">Liste admins</a></li>
+              <li><a href="/listmusique.html">Liste Musiques</a></li>
               <li><a href="/listadmin.html">Liste Administrateurs</a></li>
               <li><a href="/listplugin.html">Liste Plugins</a></li>
       <li><a href="/deconnexion.html">Deconnexion</a></li>
@@ -21,24 +21,36 @@
 
         </ul>
           <div id="add" class="hidden">
-        <form id="addadmin" method="post">
-            email <input type="text" name="email">
-            login  <input type="text" name="login">
-            mot de passe  <input type="password" name="pass">
-            confirmer mot de passe <input type="password" name="cpass">
-            <input type="button" id="buttonadd"  value="valider">
-        </form>
+            <form method="post" role="form" class="form-group form-horizontal" id="addadmin"  >
+
+                  <div class="form-group"><label class="control-label col-sm-2" for="email">email :</label>   <div class="col-sm-10"> <input type="email" class="form-control"  id="email"  name="email">  </div> </div>
+                      <div class="form-group"><label class="control-label col-sm-2" for="login">login :</label>   <div class="col-sm-10"> <input type="text" class="form-control"  id="login"  name="login">  </div> </div>
+                  <div class="form-group"><label class="control-label col-sm-2" for="pass">password</label> :  <div class="col-sm-10"><input type="password" class="form-control"  id="pass"  name="pass">  </div> </div>
+                  <div class="form-group"><label class="control-label col-sm-2" for="cpass">Confirm password :</label>   <div class="col-sm-10"> <input type="password" class="form-control"  id="cpass"  name="cpass">  </div> </div>
+
+                <div class="col-sm-offset-2 col-sm-10">
+                <div class="col-sm-offset-2 col-sm-10">
+               <input type="button" class="btn btn-default" id="buttonadd" value="valider">
+              </div></div>
+            </form>
+
       </div>
-      <button id='addbutton'>Add admin</button>
+      <button  class='btn btn-default' id='addbutton'>Add admin</button>
       <div id="update" class="hidden">
-      <form action="/updateadmin"  id="updateform" method="post">
-          <input type="hidden" id="idfield" name="id">
-          email <input type="text" id="emailfield" name="email">
-          login  <input type="text" id="loginfield" name="login">
-          mot de passe  <input type="password" name="pass">
-          confirmer mot de passe <input type="password" name="cpass">
-              <input type="button" id="updatebutton" value="valider">
+
+      <form method="post" role="form" class="form-group form-horizontal" id="updateform"  >
+              <input type="hidden" id="idfield" name="id">
+            <div class="form-group"><label class="control-label col-sm-2" for="email">email :</label>   <div class="col-sm-10"> <input type="email" class="form-control"  id="emailfield"  name="email">  </div> </div>
+                <div class="form-group"><label class="control-label col-sm-2" for="login">login :</label>   <div class="col-sm-10"> <input type="text" class="form-control"  id="loginfield"  name="login">  </div> </div>
+            <div class="form-group"><label class="control-label col-sm-2" for="pass">password</label> :  <div class="col-sm-10"><input type="password" class="form-control"  id="pass"  name="pass">  </div> </div>
+            <div class="form-group"><label class="control-label col-sm-2" for="cpass">Confirm password :</label>   <div class="col-sm-10"> <input type="password" class="form-control"  id="cpass"  name="cpass">  </div> </div>
+
+          <div class="col-sm-offset-2 col-sm-10">
+          <div class="col-sm-offset-2 col-sm-10">
+         <input type="button" class="btn btn-default" id="buttonadd" value="valider">
+        </div></div>
       </form>
+
     </div>
     </body>
 </html>
@@ -51,7 +63,7 @@ $.ajax({
        var items = [];
       $.each( html, function( key, val ) {
 
-        items.push("<li >" + val.email + "<button id='deleteadmin' value="+val.id+">Delete</button><button id='updateadmin' value="+val.id+">Update</button></li> ");
+        items.push("<li >" + val.email + "<button id='deleteadmin'  class='btn btn-default' value="+val.id+">Delete</button><button id='updateadmin' class='btn btn-default' value="+val.id+">Update</button></li> ");
       });
       $("#list").append(items);
     },
