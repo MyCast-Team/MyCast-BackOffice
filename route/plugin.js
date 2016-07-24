@@ -3,7 +3,7 @@ var utils = require("../Utils");
 var multer = require("multer");
 var storage = multer.diskStorage({
     destination: function (req, file, callback) {
-        callback(null, './uploads');
+        callback(null, './route/uploads');
     },
     filename: function (req, file, callback) {
         callback(null, file.fieldname + '-' + file.originalname);
@@ -21,7 +21,7 @@ module.exports = function (app) {
             }
             plugin.findOne(request).then(function (results) {
         console.log(results.name);
-          var filePath = "/route/uploads/plugin-"+results.name;
+          var filePath = "/uploads/plugin-"+results.name;
           console.log(filePath)
           res.sendFile(__dirname+filePath)
 
